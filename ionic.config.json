@@ -1,0 +1,7 @@
+{
+  "name": "Waddup",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
