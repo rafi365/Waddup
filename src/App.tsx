@@ -1,5 +1,5 @@
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
+import { IonApp, IonContent, IonFooter, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonMenu, IonMenuToggle, IonRouterOutlet, IonTitle, IonToggle, IonToolbar, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
 
@@ -25,13 +25,57 @@ import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import Profile from './pages/Profile';
 import Contact from './pages/Contact';
+import { helpCircleOutline, moon, personCircleOutline, settingsOutline } from 'ionicons/icons';
 
 setupIonicReact();
+
+const toggleDarkModeHandler = () => {
+  document.body.classList.toggle("dark");
+};
 
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
-      <IonRouterOutlet>
+      <IonMenu contentId='main'>
+        <IonHeader>
+          <IonToolbar color='primary'>
+            <IonTitle className='ion-text-center'>Menu</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent color='medium'>
+          <IonList>
+            <IonMenuToggle>
+              <IonItem>
+                <IonIcon slot='start' icon={personCircleOutline}/>
+                <IonLabel>Profile</IonLabel>
+              </IonItem>
+              <IonItem>
+                <IonIcon slot='start' icon={helpCircleOutline}/>
+                <IonLabel>FAQ</IonLabel>
+              </IonItem>
+              <IonItem>
+                <IonIcon slot='start' icon={settingsOutline}/>
+                <IonLabel>Settings</IonLabel>
+              </IonItem>
+              <IonItem>
+                <IonIcon slot="start" icon={moon} />
+                  <IonLabel>Dark Mode</IonLabel>
+                  <IonToggle
+                    slot="end"
+                    name="darkMode"
+                    onIonChange={toggleDarkModeHandler}
+                  />
+              </IonItem>
+            </IonMenuToggle>
+          </IonList>
+        </IonContent>
+        <IonFooter>
+          <IonToolbar color='primary'>
+            <IonTitle className='ion-text-center'>Version 0.0.1</IonTitle>
+          </IonToolbar>
+        </IonFooter>
+      </IonMenu>
+      <IonRouterOutlet id='main'>
         <Route exact path="/home">
           <Home />
         </Route>

@@ -1,3 +1,9 @@
+.cus_font {
+    font-family: 'Satisfy', cursive;
+    font-size:      24px;
+    /* font-weight:    bold; */
+}
+
 /* Style For Login & SignUp Page */
 
 input[type=text] {
@@ -21,10 +27,9 @@ input[type=text] {
 
 .moveto-signup{ margin-top: 50px; }
 
-
-
 /* home */
 
 /* contact */
 
 /* profile */
+
