@@ -18,8 +18,8 @@ const Home: React.FC = () => (
         </IonButtons>
       </IonToolbar>
     </IonHeader>
-    <IonContent>
-      <IonList>
+    <IonContent color='medium'>
+      <IonList color='medium'>
         <IonItem color='secondary' lines="full">
           <IonThumbnail slot="start" className='ion-margin'>
             <IonAvatar>

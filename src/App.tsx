@@ -42,7 +42,7 @@ const App: React.FC = () => (
             <IonTitle className='ion-text-center'>Menu</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonContent>
+        <IonContent color='medium'>
           <IonList>
             <IonMenuToggle>
               <IonItem>
