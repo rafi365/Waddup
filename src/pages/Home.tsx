@@ -10,7 +10,7 @@ const Home: React.FC = () => (
         <IonButtons slot='start'>
           <IonMenuButton />
         </IonButtons>
-        <IonTitle>Waddup</IonTitle>
+        <IonTitle className='cus_font'>Waddup</IonTitle>
         <IonButtons slot='end'>
           <IonButton slot='icon-only'>
             <IonIcon icon={searchOutline} />
