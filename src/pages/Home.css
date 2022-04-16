@@ -1,0 +1,30 @@
+/* Style For Login & SignUp Page */
+
+input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px auto;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    outline: none;
+    color: gray;
+ }
+.content-login-signup{
+    width: 350px;
+    margin-top: 200px;
+}
+.app-title{ font-size: 50px; }
+
+.btn { margin-top: 30px; }
+
+.moveto-signup{ margin-top: 50px; }
+
+
+
+/* home */
+
+/* contact */
+
+/* profile */
