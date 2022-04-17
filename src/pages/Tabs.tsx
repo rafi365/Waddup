@@ -23,7 +23,7 @@ const Tabs = () => (
                 </IonTabButton>
                 <IonTabButton tab='contacts' href='/tabs/contacts'>
                     <IonIcon icon={peopleCircle}/>
-                    <IonLabel>Chats</IonLabel>
+                    <IonLabel>Contacts</IonLabel>
                 </IonTabButton>
             </IonTabBar>
         </IonTabs>
