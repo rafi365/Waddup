@@ -33,3 +33,31 @@ input[type=text] {
 
 /* profile */
 
+.container {
+    text-align: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 35%;
+    transform: translateY(-50%);
+  }
+
+.container img {
+    border-radius: 50%;
+    border: 1px solid #3D4B6D;
+    width: 12em;
+}
+
+.container h1 {
+    margin-top: 30px;
+}
+
+.profile-button {
+    text-align: center;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 2em;
+    box-shadow: 0 5px #acacac;
+}
+

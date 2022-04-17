@@ -1,5 +1,4 @@
 import { IonAvatar, IonButton, IonButtons, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonMenuButton, IonPage, IonText, IonThumbnail, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
 import './Home.css';
 import { chatboxEllipsesOutline, searchOutline } from 'ionicons/icons';
 
@@ -11,16 +10,15 @@ const Home: React.FC = () => (
           <IonMenuButton />
         </IonButtons>
         <IonTitle className='cus_font'>Waddup</IonTitle>
-        <IonButtons slot='end'>
+        <IonButtons slot='end' className='ion-margin'>
           <IonButton slot='icon-only'>
             <IonIcon icon={searchOutline} />
           </IonButton>
         </IonButtons>
       </IonToolbar>
     </IonHeader>
-    <IonContent color='medium'>
-      <IonList color='medium'>
-        <IonItem color='secondary' lines="full">
+    <IonContent fullscreen>
+        <IonItem color='secondary' lines="full" button>
           <IonThumbnail slot="start" className='ion-margin'>
             <IonAvatar>
               <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
@@ -32,7 +30,7 @@ const Home: React.FC = () => (
             <p>12.00</p>
           </IonLabel>
         </IonItem>
-        <IonItem color='secondary' lines="full">
+        <IonItem color='secondary' lines="full" button>
           <IonThumbnail slot="start" className='ion-margin'>
             <IonAvatar>
               <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
@@ -44,7 +42,6 @@ const Home: React.FC = () => (
             <p>12.00</p>
           </IonLabel>
         </IonItem>
-      </IonList>
         <IonFab horizontal='end' vertical='bottom' slot='fixed'>
             <IonFabButton color='primary' routerLink='/tabs/new'>
                 <IonIcon icon={chatboxEllipsesOutline}/>

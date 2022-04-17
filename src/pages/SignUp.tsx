@@ -1,7 +1,6 @@
 import { IonButton, IonCol, IonContent, IonGrid, IonPage, IonRow, IonText, IonTitle} from '@ionic/react';
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import ExploreContainer from '../components/ExploreContainer';
 import './Home.css';
 
 const SignUp: React.FC = () => {
