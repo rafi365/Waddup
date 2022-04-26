@@ -5,7 +5,7 @@
 
 /* Login & SignUp Page */
 
-input[type=text] {
+.inputcss {
     width: 100%;
     padding: 12px 20px;
     margin: 8px auto;
@@ -17,18 +17,7 @@ input[type=text] {
     color: gray;
     background-color: white;
  }
- input[type=password] {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px auto;
-    display: block;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-    outline: none;
-    color: gray;
-    background-color: white;
- }
+
 .content-login-signup{
     width: 350px;
     margin-top: 150px;

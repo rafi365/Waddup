@@ -1,11 +1,15 @@
-import { IonCol, IonContent, IonGrid,  IonPage, IonRow, IonTitle,  IonText, IonButton} from '@ionic/react';
+import { IonCol, IonContent, IonGrid,  IonPage, IonRow, IonTitle,  IonText, IonButton, IonInput} from '@ionic/react';
 import { useRef, useState } from 'react';
 import {Link} from 'react-router-dom';
 import './Home.css';
+import { Controller, useForm } from 'react-hook-form'
 
 const Login: React.FC = () => {
-  const [isLogin, setIsLogin] = useState(false);
-  const btnLogin = useRef<HTMLIonButtonElement>(null);
+  const { register, handleSubmit } = useForm();
+
+  const registerUser = (data: any) => {
+    console.log('creating a new user account with: ', data);
+  }
 
   const linkStyle = {
     margin: "1rem",
@@ -23,18 +27,17 @@ const Login: React.FC = () => {
             </IonRow>
             <IonRow className='ion-justify-content-center'>
               <IonCol className="ion-align-items-center">
-                <form action="submit" className='ion-margin login_form '>
+                <form onSubmit={handleSubmit(registerUser)}className='ion-margin login_form '>
                   <label>Email: </label>
-                  <input type="text" name="email"/>
+                  <IonInput type="email" {...register("email")} required className='inputcss'/>
                   <label>Password: </label>
-                  <input type="password" name="password"/>
+                  <IonInput type="password" {...register("password")} required className='inputcss'/>
                   <div className='btn ion-text-center'>
                     <IonButton 
                       type='submit' 
                       color="secondary" 
                       className='ion-text-center'
                       expand='block'
-                      ref={btnLogin}
                     > Login
                     </IonButton>   
                   </div>     
