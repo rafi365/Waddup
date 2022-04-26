@@ -48,6 +48,7 @@ import {
   settingsOutline,
 } from "ionicons/icons";
 import Tabs from "./pages/Tabs";
+import Chatting from "./pages/Chatting";
 
 setupIonicReact();
 
@@ -101,6 +102,7 @@ const App: React.FC = () => (
         <Route path="/tabs" component={Tabs} />
         <Route path="/login" component={Login} />
         <Route path="/signup" component={SignUp}/>
+        <Route path="/chat" component={Chatting}/>
         <Redirect exact from="/" to="/tabs" />
       </IonRouterOutlet>
     </IonReactRouter>
