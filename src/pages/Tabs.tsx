@@ -6,6 +6,7 @@ import { Redirect, Route } from "react-router";
 import Home from "../pages/Home";
 import Contact from "../pages/Contact";
 import Profile from "./Profile";
+import Chatting from "./Chatting";
 
 const Tabs = () => (
     <>

@@ -39,8 +39,8 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
-import Profile from "./pages/Profile";
-import Contact from "./pages/Contact";
+// import Profile from "./pages/Profile";
+// import Contact from "./pages/Contact";
 import {
   helpCircleOutline,
   moon,
