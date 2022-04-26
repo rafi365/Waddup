@@ -27,7 +27,7 @@ const Login: React.FC = () => {
                   <label>Email: </label>
                   <input type="text" name="email"/>
                   <label>Password: </label>
-                  <input type="text" name="password"/>
+                  <input type="password" name="password"/>
                   <div className='btn ion-text-center'>
                     <IonButton 
                       type='submit' 

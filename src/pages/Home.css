@@ -1,10 +1,9 @@
 .cus_font {
     font-family: 'Satisfy', cursive;
     font-size:      24px;
-    /* font-weight:    bold; */
 }
 
-/* Style For Login & SignUp Page */
+/* Login & SignUp Page */
 
 input[type=text] {
     width: 100%;
@@ -16,6 +15,19 @@ input[type=text] {
     box-sizing: border-box;
     outline: none;
     color: gray;
+    background-color: white;
+ }
+ input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px auto;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    outline: none;
+    color: gray;
+    background-color: white;
  }
 .content-login-signup{
     width: 350px;
