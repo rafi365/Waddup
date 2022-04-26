@@ -60,7 +60,7 @@ const Home: React.FC = () => {
       </IonToolbar>
     </IonHeader>
     <IonContent fullscreen>
-        <IonItem color='secondary' lines="full" button>
+        <IonItem color='secondary' lines="full" button href='/chat'>
           <IonThumbnail slot="start" className='ion-margin'>
             <IonAvatar>
               <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
@@ -72,7 +72,7 @@ const Home: React.FC = () => {
             <p>12.00</p>
           </IonLabel>
         </IonItem>
-        <IonItem color='secondary' lines="full" button>
+        <IonItem color='secondary' lines="full">
           <IonThumbnail slot="start" className='ion-margin'>
             <IonAvatar>
               <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
