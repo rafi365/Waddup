@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
 import "./Home.css"
+import "./Chatting.css"
 
 const Chatting = () => {
 
@@ -130,26 +131,24 @@ const Chatting = () => {
             <IonFooter className="chat-footer" id="chat-footer">
                 <IonGrid>
                     <IonRow className="ion-align-items-center">
-                        <IonCol>
+                        <IonCol size="1">
                             <IonIcon icon={ addOutline } color="primary" />
                         </IonCol>
 
-                        <IonCol>
                         <div className="chat-input-container">
                         <IonTextarea rows={1} value={message} placeholder="chat here" />
                         </div>
-                        </IonCol>
 
-                            <IonCol>
+                            <IonCol size="1">
                                 <IonIcon icon={ cameraOutline } color="primary" />
                             </IonCol>
 
-                            <IonCol>
+                            <IonCol size="1">
                                 <IonIcon icon={ micOutline } color="primary" />
                             </IonCol>
 
 
-                            <IonCol className="chat-send-button" >
+                            <IonCol size="1" className="chat-send-button" >
                                 <IonIcon icon={ send } />
                             </IonCol>
                     </IonRow>
