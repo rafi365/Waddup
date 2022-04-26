@@ -56,57 +56,60 @@ const toggleDarkModeHandler = () => {
   document.body.classList.toggle("dark");
 };
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonMenu contentId="main">
-        <IonHeader>
-          <IonToolbar color="primary">
-            <IonTitle className="ion-text-center">Menu</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <IonContent color="medium">
-          <IonList>
-            <IonMenuToggle>
-              <IonItem button routerLink="/tabs/profile">
-                <IonIcon slot="start" icon={personCircleOutline} />
-                <IonLabel>Profile</IonLabel>
-              </IonItem>
-              <IonItem>
-                <IonIcon slot="start" icon={helpCircleOutline} />
-                <IonLabel>FAQ</IonLabel>
-              </IonItem>
-              <IonItem>
-                <IonIcon slot="start" icon={settingsOutline} />
-                <IonLabel>Settings</IonLabel>
-              </IonItem>
-              <IonItem>
-                <IonIcon slot="start" icon={moon} />
-                <IonLabel>Dark Mode</IonLabel>
-                <IonToggle
-                  slot="end"
-                  name="darkMode"
-                  onIonChange={toggleDarkModeHandler}
-                />
-              </IonItem>
-            </IonMenuToggle>
-          </IonList>
-        </IonContent>
-        <IonFooter>
-          <IonToolbar color="primary">
-            <IonTitle className="ion-text-center">Version 0.0.1</IonTitle>
-          </IonToolbar>
-        </IonFooter>
-      </IonMenu>
-      <IonRouterOutlet id="main">
-        <Route path="/tabs" component={Tabs} />
-        <Route path="/login" component={Login} />
-        <Route path="/signup" component={SignUp}/>
-        <Route path="/chat" component={Chatting}/>
-        <Redirect exact from="/" to="/tabs" />
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+const App: React.FC = () => {
+  
+  return(
+    <IonApp>
+      <IonReactRouter>
+        <IonMenu contentId="main">
+          <IonHeader>
+            <IonToolbar color="primary">
+              <IonTitle className="ion-text-center">Menu</IonTitle>
+            </IonToolbar>
+          </IonHeader>
+          <IonContent color="medium">
+            <IonList>
+              <IonMenuToggle>
+                <IonItem button routerLink="/tabs/profile">
+                  <IonIcon slot="start" icon={personCircleOutline} />
+                  <IonLabel>Profile</IonLabel>
+                </IonItem>
+                <IonItem>
+                  <IonIcon slot="start" icon={helpCircleOutline} />
+                  <IonLabel>FAQ</IonLabel>
+                </IonItem>
+                <IonItem>
+                  <IonIcon slot="start" icon={settingsOutline} />
+                  <IonLabel>Settings</IonLabel>
+                </IonItem>
+                <IonItem>
+                  <IonIcon slot="start" icon={moon} />
+                  <IonLabel>Dark Mode</IonLabel>
+                  <IonToggle
+                    slot="end"
+                    name="darkMode"
+                    onIonChange={toggleDarkModeHandler}
+                  />
+                </IonItem>
+              </IonMenuToggle>
+            </IonList>
+          </IonContent>
+          <IonFooter>
+            <IonToolbar color="primary">
+              <IonTitle className="ion-text-center">Version 0.0.1</IonTitle>
+            </IonToolbar>
+          </IonFooter>
+        </IonMenu>
+        <IonRouterOutlet id="main">
+          <Route path="/tabs" component={Tabs} />
+          <Route path="/login" component={Login} />
+          <Route path="/signup" component={SignUp}/>
+          <Route path="/chat" component={Chatting}/>
+          <Redirect exact from="/" to="/login" />
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </IonApp>
+  );
+};
 
 export default App;

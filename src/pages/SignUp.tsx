@@ -1,17 +1,55 @@
-import { IonButton, IonCol, IonContent, IonGrid, IonInput, IonPage, IonRow, IonText, IonTitle} from '@ionic/react';
+import { IonButton, IonCol, IonContent, IonGrid, IonInput, IonPage, IonRow, IonText, IonTitle, IonToast, useIonViewWillEnter} from '@ionic/react';
+import { createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { auth } from '../firebaseConfig';
 import './Home.css';
 
 const SignUp: React.FC = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const btnSignUp = useRef<HTMLIonButtonElement>(null);
   const { register, handleSubmit } = useForm();
-
+  const [ toastMessage, setToastMessage ] = useState('');
+  const history = useHistory();
+  // onAuthStateChanged(auth, (user) => {
+  //   if (user) {
+  //     // User is signed in, see docs for a list of available properties
+  //     // https://firebase.google.com/docs/reference/js/firebase.User
+  //     const uid = user.uid;
+  //     history.replace('/tabs/home');
+  //   }
+  // });
+  useIonViewWillEnter(() => {
+    console.log('ionViewWillEnter event fired');
+    console.log(auth.currentUser?.uid);
+    if(!!auth.currentUser?.uid){//if user is logged in(true)
+      history.replace('/tabs/home');
+    }
+  });
   const registerUser = (data: any) => {
     console.log('creating a new user account with: ', data);
+    if(!!data['email'] && !!data['password']){
+    createUserWithEmailAndPassword(auth, data['email'], data['password'])
+    .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        // ...
+        setToastMessage('Sign Up Success!');
+        history.replace('/tabs/home');
+    })
+    .catch((error) => {
+        console.log("SignUp Failed!");
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode);
+        console.log(errorMessage);
+        setToastMessage(errorMessage);
+    });
+  }else{
+    setToastMessage('Input box is blank!');
   }
+  };
   const linkStyle = {
     margin: "1rem",
     color: 'white'
@@ -60,6 +98,10 @@ const SignUp: React.FC = () => {
             </IonRow> 
           </IonGrid>
         </IonContent>
+        <IonToast isOpen={!!toastMessage}
+                    message={toastMessage}
+                    duration={2000}
+                    onDidDismiss={() => { setToastMessage('') }} />
     </IonPage>
   );
 };

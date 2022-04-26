@@ -10,10 +10,21 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
+import { signOut } from "firebase/auth";
 import { logOutOutline } from "ionicons/icons";
+import { useHistory } from "react-router-dom";
+import { auth } from "../firebaseConfig";
 import "./Home.css";
 
 const Profile: React.FC = () => {
+  const history = useHistory();
+  const signout = () => signOut(auth).then(() => {
+    // Sign-out successful.
+    history.replace('/login');
+}).catch((error) => {
+    // An error happened.
+    console.log(error)
+});
   return (
     <IonPage>
       <IonHeader>
@@ -30,13 +41,15 @@ const Profile: React.FC = () => {
             src="https://media.discordapp.net/attachments/926433926027808770/965095961418428476/IMG_20220410_233007.jpg?width=476&height=480"
             alt="#"
           />
-        <h1 className="ion-margin-top">Om Burhan</h1>
+        {/* <h1 className="ion-margin-top">Om Burhan</h1> */}
+        <h1 className="ion-margin-top">{auth.currentUser?.email}</h1>
         <h3><i>The "om jangan om" guy</i></h3>
         </div>
         <IonButton
           expand="block"
           className="ion-margin profile-button"
           color="danger"
+          onClick={signout}
         >
           <IonLabel className="ion-padding ion-margin">Logout</IonLabel>
           <IonIcon icon={logOutOutline} />

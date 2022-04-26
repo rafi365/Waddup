@@ -1,7 +1,9 @@
-import { IonAvatar, IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonMenuButton, IonModal, IonPage, IonRow, IonText, IonThumbnail, IonTitle, IonToast, IonToolbar } from '@ionic/react';
+import { IonAvatar, IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonMenuButton, IonModal, IonPage, IonRow, IonText, IonThumbnail, IonTitle, IonToast, IonToolbar, useIonViewWillEnter } from '@ionic/react';
 import './Home.css';
 import { chatboxEllipsesOutline, searchOutline } from 'ionicons/icons';
 import { useState } from 'react';
+import { useHistory } from 'react-router';
+import { auth } from '../firebaseConfig';
 
 const Home: React.FC = () => {
   const [ isCreating, setIsCreating ] = useState(false);
@@ -15,7 +17,6 @@ const Home: React.FC = () => {
     setIsCreating(false);
     setToastMessage('Chat room has been created!');
   }
-
   return(
   <IonPage>
     <IonModal isOpen={isCreating}>
