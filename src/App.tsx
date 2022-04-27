@@ -49,6 +49,9 @@ import {
 } from "ionicons/icons";
 import Tabs from "./pages/Tabs";
 import Chatting from "./pages/Chatting";
+import { useEffect, useState } from "react";
+import { auth } from "./firebaseConfig";
+import { User } from "firebase/auth";
 
 setupIonicReact();
 
@@ -57,7 +60,27 @@ const toggleDarkModeHandler = () => {
 };
 
 const App: React.FC = () => {
-  
+  // Set an initializing state whilst Firebase connects
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState<User|null|undefined>();
+
+  // Handle user state changes
+  function onAuthStateChanged(user:User|null|undefined) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
+
+  useEffect(() => {
+    const subscriber = auth.onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  // if (initializing) return (<>
+  // <h1>Connecting to firebase Servers.......</h1>
+  // </>);
+  if (initializing) return null;
+
+
   return(
     <IonApp>
       <IonReactRouter>
