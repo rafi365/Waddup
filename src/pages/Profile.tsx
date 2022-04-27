@@ -9,21 +9,27 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
+  useIonViewWillEnter,
 } from "@ionic/react";
 import { signOut } from "firebase/auth";
 import { logOutOutline } from "ionicons/icons";
+import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { auth } from "../firebaseConfig";
+import { auth, getusername } from "../firebaseConfig";
 import "./Home.css";
 
 const Profile: React.FC = () => {
   const history = useHistory();
+  const [ name, setName ] = useState('');
   const signout = () => signOut(auth).then(() => {
     // Sign-out successful.
     history.replace('/login');
 }).catch((error) => {
     // An error happened.
     console.log(error)
+});
+useIonViewWillEnter(() => {
+  getusername().then((a)=>setName(a));
 });
   return (
     <IonPage>
@@ -42,7 +48,7 @@ const Profile: React.FC = () => {
             alt="#"
           />
         {/* <h1 className="ion-margin-top">Om Burhan</h1> */}
-        <h1 className="ion-margin-top">{auth.currentUser?.email}</h1>
+        <h1 className="ion-margin-top">{name}</h1>
         <h3><i>The "om jangan om" guy</i></h3>
         </div>
         <IonButton
