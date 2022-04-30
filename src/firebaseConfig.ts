@@ -60,13 +60,13 @@ export async function addContact(friendID: string) {
       console.log(doc.id, " => ", doc.data());
       islooping = doc.id;
     });
-    if(!!islooping){
-      if(islooping === auth.currentUser!.uid) return "Cannot add yourself as contact!";
+    if (!!islooping) {
+      if (islooping === auth.currentUser!.uid) return "Cannot add yourself as contact!";
       const docRef = await updateDoc(doc(db, "users", auth.currentUser!.uid), {
         contacts: arrayUnion(islooping)
-    });
-    docRef;
-    return "Contacts Successfully added!";
+      });
+      docRef;
+      return "Contacts Successfully added!";
     }
     return "FriendID Not Found!";
 
@@ -77,7 +77,7 @@ export async function addContact(friendID: string) {
   }
 }
 
-export const getusername = async (userid:string) => {
+export const getusername = async (userid: string) => {
   const docSnap = await getDoc(doc(db, "users", userid));
   if (docSnap.exists()) {
     console.log("Document data:", docSnap.data().name);
@@ -93,7 +93,7 @@ export const getContactIDs = async () => {
   const docSnap = await getDoc(doc(db, "users", auth.currentUser!.uid));
   if (docSnap.exists()) {
     // console.log("Document data:", docSnap.data().name);
-    const out:string[] = docSnap.data().contacts;
+    const out: string[] = docSnap.data().contacts;
 
     return out;
   } else {

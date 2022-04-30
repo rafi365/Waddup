@@ -20,17 +20,17 @@ import "./Home.css";
 
 const Profile: React.FC = () => {
   const history = useHistory();
-  const [ name, setName ] = useState('');
+  const [name, setName] = useState('');
   const signout = () => signOut(auth).then(() => {
     // Sign-out successful.
     history.replace('/login');
-}).catch((error) => {
+  }).catch((error) => {
     // An error happened.
     console.log(error)
-});
-useIonViewWillEnter(() => {
-  getusername(auth.currentUser!.uid).then((a)=>setName(a));
-});
+  });
+  useIonViewWillEnter(() => {
+    getusername(auth.currentUser!.uid).then((a) => setName(a));
+  });
   return (
     <IonPage>
       <IonHeader>
@@ -47,9 +47,9 @@ useIonViewWillEnter(() => {
             src="https://media.discordapp.net/attachments/926433926027808770/965095961418428476/IMG_20220410_233007.jpg?width=476&height=480"
             alt="#"
           />
-        {/* <h1 className="ion-margin-top">Om Burhan</h1> */}
-        <h1 className="ion-margin-top">{name}</h1>
-        <h3><i>The "om jangan om" guy</i></h3>
+          {/* <h1 className="ion-margin-top">Om Burhan</h1> */}
+          <h1 className="ion-margin-top">{name}</h1>
+          <h3><i>The "om jangan om" guy</i></h3>
         </div>
         <IonButton
           expand="block"

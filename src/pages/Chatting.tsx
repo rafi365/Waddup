@@ -60,17 +60,17 @@ const Chatting = () => {
     },
     actionMessage
       ? {
-          text: "Reply To Message",
-          icon: shareOutline,
-        }
+        text: "Reply To Message",
+        icon: shareOutline,
+      }
       : {
-          text: "Unsend Message",
-          icon: alertOutline,
-          handler: () =>
-            toaster(
-              "I haven't implemented unsend :) Simple store update though"
-            ),
-        },
+        text: "Unsend Message",
+        icon: alertOutline,
+        handler: () =>
+          toaster(
+            "I haven't implemented unsend :) Simple store update though"
+          ),
+      },
     {
       text: "Delete Message",
       icon: trashOutline,
@@ -96,7 +96,7 @@ const Chatting = () => {
   };
 
   //  Scroll to end of content
-  const scrollToBottom = async () => {};
+  const scrollToBottom = async () => { };
 
   //  Set the state value when message val changes
   useEffect(() => {

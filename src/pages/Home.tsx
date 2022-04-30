@@ -28,7 +28,7 @@ const Home: React.FC = () => {
     });
     return unsub; // unsubscribe on unmount
   }, []);
-  
+
   return (
     <IonPage>
 
