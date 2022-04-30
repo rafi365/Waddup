@@ -29,7 +29,7 @@ const Profile: React.FC = () => {
     console.log(error)
 });
 useIonViewWillEnter(() => {
-  getusername().then((a)=>setName(a));
+  getusername(auth.currentUser!.uid).then((a)=>setName(a));
 });
   return (
     <IonPage>
