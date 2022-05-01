@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { arrayUnion, collection, doc, getDoc, getDocs, getFirestore, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
+import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -76,6 +76,21 @@ export async function addContact(friendID: string) {
     return `An Error Occoured! ${e}`;
   }
 }
+export async function deleteContact(friendID: string) {
+  try {
+    
+      const docRef = await updateDoc(doc(db, "users", auth.currentUser!.uid), {
+        contacts: arrayRemove(friendID)
+      });
+      docRef;
+      return "Contacts Successfully deleted!"
+
+    // console.log("Document written with ID: ", docRef);
+  } catch (e) {
+    // console.error("Error adding document: ", e);
+    return `An Error Occoured! ${e}`;
+  }
+}
 
 export const getusername = async (userid: string) => {
   const docSnap = await getDoc(doc(db, "users", userid));
@@ -101,4 +116,25 @@ export const getContactIDs = async () => {
     console.log("No such document!");
     return null;
   }
+}
+
+export type Wuserdata = {
+  uid:string,
+  avatarurl: string | null,
+  contacts: string[] | null,
+  friendID: string | null,
+  name: string | null,
+  timestamp: number
+}
+
+export const usertoWuser = (userdata:any) =>{
+  const a:Wuserdata = {
+    uid:userdata.id,
+    avatarurl:userdata.data()['avatarurl'],
+    contacts:userdata.data()['contacts'],
+    friendID:userdata.data()['friendID'],
+    name:userdata.data()['name'],
+    timestamp:userdata.data()['timestamp']
+  }
+  return a;
 }

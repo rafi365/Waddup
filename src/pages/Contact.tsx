@@ -30,32 +30,36 @@ import {
 import { query, collection, where, getDocs, QuerySnapshot, documentId } from "firebase/firestore";
 import { ban, personAddOutline, searchOutline, trashBin } from "ionicons/icons";
 import { useEffect, useRef, useState } from "react";
-import { addContact, db, getContactIDs } from "../firebaseConfig";
+import { addContact, db, deleteContact, getContactIDs, usertoWuser, Wuserdata } from "../firebaseConfig";
 import "./Home.css";
 
 const Contact: React.FC = () => {
   const slidingContactRef = useRef<HTMLIonItemSlidingElement>(null);
 
   const [isAdding, setIsAdding] = useState(false);
-  const [startDeleting, setStartDeleting] = useState(false);
+  const [startDeleting, setStartDeleting] = useState<string | boolean>(false);
   const [toastMessage, setToastMessage] = useState('');
-  const [contactList, setContactList] = useState<string[]>();
+  const [contactList, setContactList] = useState<Wuserdata[]>();
   const contactref = useRef<HTMLIonInputElement>(null);
 
   const startAddContactHandler = () => {
-    console.log('Adding contact...');
+    // console.log('Adding contact...');
     setIsAdding(true);
   }
 
-  const startDeleteContactHandler = () => {
-    console.log("starting delete, awaiting confirmation...");
-    setStartDeleting(true);
+  const startDeleteContactHandler = (e: string) => {
+    // console.log("starting delete, awaiting confirmation...");
+    // console.log('asdsa = '+e);
+    setStartDeleting(e);
     slidingContactRef.current?.closeOpened();
   };
 
   const deleteContactHandler = () => {
+    deleteContact(startDeleting.toString()).then((e) => {
+      setToastMessage(e);
+      refreshcontact();
+    })
     setStartDeleting(false);
-    setToastMessage('Contact has been deleted!')
   };
 
   const saveContactHandler = () => {
@@ -72,10 +76,10 @@ const Contact: React.FC = () => {
   }
   const refreshcontact = () => {
     getContactIDs().then((e) => {
-      console.log(e);
-      if (!!e?.length) {
+      // console.log(e);
+      if (!!e?.length) {//checks if string array is empty
         // console.log('IN!')
-        let temp: string[] = [];
+        let temp: Wuserdata[] = [];
         while (e.length) {
           // console.log(e.splice(0,10));
           const query_batch = e.splice(0, 10);// splits contacts list to get under the 10 per query limit
@@ -85,15 +89,18 @@ const Contact: React.FC = () => {
             // console.log(q)
             querySnapshot.forEach((doc) => {
               // doc.data() is never undefined for query doc snapshots
-              console.log(doc.id, " => ", doc.data());
-              temp.push(doc.data()['name']);
+              // console.log(doc.id, " => ", doc.data());
+              const a: Wuserdata = usertoWuser(doc);
+              temp.push(a);
             });
             setContactList(temp);
           }).catch((e) => {
             console.log(e);
           })
-
+          
         }
+      }else{
+        setContactList(undefined);
       }
     })
   }
@@ -103,9 +110,9 @@ const Contact: React.FC = () => {
 
   return (
     <>
-      <IonAlert isOpen={startDeleting}
+      <IonAlert isOpen={!!startDeleting}
         header="Are you sure?"
-        message="Do you want to delete this friend? This cannot be undone."
+        message="Do you want to delete this contact? This cannot be undone."
         buttons={[
           { text: 'No', role: 'cancel', handler: () => { setStartDeleting(false) } },
           { text: 'Yes', handler: deleteContactHandler }
@@ -156,7 +163,7 @@ const Contact: React.FC = () => {
         <IonContent fullscreen>
           {!!contactList ? contactList?.map((e) => {
             return (
-              <IonItemSliding ref={slidingContactRef}>
+              <IonItemSliding ref={slidingContactRef} key={e.uid}>
                 <IonItem color="secondary" lines="full" button>
                   <IonThumbnail slot="start" className="ion-margin">
                     <IonAvatar>
@@ -165,14 +172,14 @@ const Contact: React.FC = () => {
                   </IonThumbnail>
                   <IonLabel color="light" className="ion-margin">
                     <IonText>
-                      <strong>{e}</strong>
+                      <strong>{e.name}</strong>
                     </IonText>
                     <br />
                     <p>lorem ipsum dolor bae</p>
                   </IonLabel>
                 </IonItem>
                 <IonItemOptions side="end">
-                  <IonItemOption color="danger" onClick={startDeleteContactHandler}>
+                  <IonItemOption color="danger" onClick={() => { startDeleteContactHandler(e.uid) }}>
                     <IonIcon slot="icon-only" icon={trashBin} />
                   </IonItemOption>
                 </IonItemOptions>
