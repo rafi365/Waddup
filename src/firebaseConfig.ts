@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { addDoc, arrayRemove, arrayUnion, collection, doc, documentId, getDoc, getDocs, getFirestore, query, QueryDocumentSnapshot, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
+import { addDoc, arrayRemove, arrayUnion, collection, doc, documentId, getDoc, getDocs, getFirestore, query, QueryDocumentSnapshot, serverTimestamp, setDoc, Timestamp, updateDoc, where } from "firebase/firestore";
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useHistory } from "react-router";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -161,12 +161,32 @@ export type Wuserdata = {
 }
 
 export type Wchat = {
-  uid: string,
+  chatuid: string,
   chatname: string | null,
   users: Wuserdata[] | null,
   img: string | null,
   isgroup: string | null
 }
+
+export type Wchatmessage = {
+  uid: string | null,
+  img: string | null,
+  text: string | null,
+  userUID: string | null,
+  timestamp: Timestamp
+}
+
+export const chatmessagetoWchatmessage = (chatmessage: QueryDocumentSnapshot) => {
+  const a: Wchatmessage = {
+    uid: chatmessage.id,
+    img: chatmessage.data()['img'],
+    text: chatmessage.data()['text'],
+    userUID: chatmessage.data()['userUID'],
+    timestamp: chatmessage.data()['timestamp']
+  }
+  return a;
+}
+
 
 export const usertoWuser = (userdata: any) => {
   const a: Wuserdata = {
@@ -187,7 +207,7 @@ export const chattoWchat = async (chatinfo: QueryDocumentSnapshot) => {
   const e = await getusers(asd)
   console.log('got users = ', e);
   const a: Wchat = {
-    uid: chatinfo.id,
+    chatuid: chatinfo.id,
     chatname: chatinfo.data()['chatname'],
     img: chatinfo.data()['img'],
     isgroup: chatinfo.data()['isgroup'],

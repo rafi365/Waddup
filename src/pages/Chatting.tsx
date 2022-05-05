@@ -32,13 +32,14 @@ import {
   trashOutline,
   videocamOutline,
 } from "ionicons/icons";
-import { SetStateAction } from "react";
+import { SetStateAction, useRef } from "react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
 import "./Home.css";
 import "./Chatting.css";
-import { getchatdata } from "../firebaseConfig";
+import { auth, chatmessagetoWchatmessage, db, getchatdata, Wchat, Wchatmessage } from "../firebaseConfig";
+import { addDoc, collection, doc, onSnapshot, orderBy, query, QuerySnapshot, serverTimestamp } from "firebase/firestore";
 
 const Chatting = () => {
   const params = useParams();
@@ -53,6 +54,9 @@ const Chatting = () => {
 
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+  const [chatInfos, setChatInfos] = useState<Wchat | null>();
+  const [chatboxtext, setChatboxtext] = useState<string>("");
+  const [chatMessages, setChatMessages] = useState<Wchatmessage[]>();
 
   const actionSheetButtons = [
     {
@@ -81,14 +85,14 @@ const Chatting = () => {
     },
   ];
 
-  useEffect(() => {
-    !showActionSheet && setActionMessage(false);
-  }, [showActionSheet]);
+  // useEffect(() => {
+  //   !showActionSheet && setActionMessage(false);
+  // }, [showActionSheet]);
 
   //  Scroll to end of content
-  useIonViewWillEnter(() => {
-    scrollToBottom();
-  });
+  // useIonViewWillEnter(() => {
+  //   scrollToBottom();
+  // });
 
   //  For displaying toast messages
   const toaster = (message: SetStateAction<string>) => {
@@ -97,32 +101,47 @@ const Chatting = () => {
   };
 
   //  Scroll to end of content
-  const scrollToBottom = async () => { };
+  // const scrollToBottom = async () => { };
 
   //  Set the state value when message val changes
-  useEffect(() => {
-    setShowSendButton(message !== "");
-  }, [message]);
+  // useEffect(() => {
+  //   setShowSendButton(message !== "");
+  // }, [message]);
 
-  const sendMessage = (image = false, _imagePath = false) => {
-    if (message !== "" || image === true) {
-      sendMessage();
-      setMessage("");
-
-      setMessageSent(true);
-      setTimeout(() => setMessageSent(false), 10);
-      image && setTimeout(() => scrollToBottom(), 100);
-    }
+  const sendMessage = () => {
+    addDoc(collection(db, "chats", chatInfos!.chatuid, 'message'), {
+      timestamp: serverTimestamp(),
+      text: chatboxtext,
+      img: null,
+      userUID: auth.currentUser?.uid
+    })
+    setChatboxtext("")
+    // console.log("Document written with ID: ", docRef.id);
   };
-
-  const urlvar = useParams<{chatID:string}>().chatID;
+  const urlvar = useParams<{ chatID: string }>().chatID;
   useEffect(() => {
     console.log('firing getchatdata')
-    getchatdata(urlvar).then((e)=>{
-      console.log('chat',e)
+    getchatdata(urlvar).then((e) => {
+      // console.log('chat',e)
+      setChatInfos(e)
+      const q = query(collection(db, "chats", e!.chatuid, 'message'), orderBy("timestamp", "asc"));
+      const unsub = onSnapshot(q, (querySnapshot) => {
+        let temp: Wchatmessage[] = [];
+        querySnapshot.forEach((doc) => {
+          // console.log('messages',doc.data());
+          temp.push(chatmessagetoWchatmessage(doc));
+        });
+        // console.log(temp)
+        setChatMessages(temp);
+      });
+      return unsub; // unsubscribe on unmount
     });
+
     console.log('done firing!');
   }, []);
+
+
+
   return (
     <IonPage>
       <IonHeader>
@@ -180,6 +199,19 @@ const Chatting = () => {
         />
 
         {/* put chat bubbles here */}
+        {chatMessages?.map((e) => {
+          const time = e.timestamp ? e.timestamp.toDate().toLocaleTimeString() : "";
+          const date = e.timestamp ? e.timestamp.toDate().toDateString() : "";
+          return (
+            <p key={e.uid}>
+              {chatInfos?.users?.find(a => a.uid === e.userUID)?.name}
+              <br />
+              {time}{date}
+              <br />
+              {e.text}
+            </p>
+          )
+        })}
       </IonContent>
 
       <IonFooter className="chat-footer" id="chat-footer">
@@ -190,7 +222,7 @@ const Chatting = () => {
             </IonCol>
 
             <div className="chat-input-container">
-              <IonTextarea rows={1} value={message} placeholder="chat here" />
+              <IonTextarea rows={1} value={chatboxtext} onIonChange={(e) => setChatboxtext(e.detail.value! ? e.detail.value! : "")} placeholder="chat here" />
             </div>
 
             <IonCol size="1">
@@ -201,7 +233,7 @@ const Chatting = () => {
               <IonIcon icon={micOutline} color="primary" />
             </IonCol>
 
-            <IonCol size="1" className="chat-send-button">
+            <IonCol size="1" className="chat-send-button" onClick={() => { sendMessage() }}>
               <IonIcon icon={send} />
             </IonCol>
           </IonRow>
