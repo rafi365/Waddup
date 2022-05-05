@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
-import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, getFirestore, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
+import { addDoc, arrayRemove, arrayUnion, collection, doc, documentId, getDoc, getDocs, getFirestore, query, QueryDocumentSnapshot, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { useHistory } from "react-router";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -78,12 +79,12 @@ export async function addContact(friendID: string) {
 }
 export async function deleteContact(friendID: string) {
   try {
-    
-      const docRef = await updateDoc(doc(db, "users", auth.currentUser!.uid), {
-        contacts: arrayRemove(friendID)
-      });
-      docRef;
-      return "Contacts Successfully deleted!"
+
+    const docRef = await updateDoc(doc(db, "users", auth.currentUser!.uid), {
+      contacts: arrayRemove(friendID)
+    });
+    docRef;
+    return "Contacts Successfully deleted!"
 
     // console.log("Document written with ID: ", docRef);
   } catch (e) {
@@ -117,9 +118,41 @@ export const getContactIDs = async () => {
     return null;
   }
 }
+export const getusers = async (users: string[] | null | undefined) => {
+  // const userarr:string[]|null = !!users? await users.map((e)=>e) : null; //for some reason length var is 0(even tho it has elements in it), so this workaround copies the array to a new one first before using it somewhere else
+  const userarr = users;
+  // console.log('nani?! ',userarr?.length)
+
+  if (!!userarr?.length) {//checks if string array is empty
+    console.log('IN!', userarr)
+    let temp: Wuserdata[] = [];
+    while (userarr.length) {
+      // console.log(e.splice(0,10));
+      const query_batch = userarr.splice(0, 10);// splits contacts list to get under the 10 per query limit
+      console.log('while ', query_batch)
+      const querysearch = query(collection(db, "users"), where(documentId(), "in", query_batch));//WARNING ONLY 10 MAX QUERRIES(according to docs)
+      // console.log('fired!')
+      const querySnapshot = await getDocs(querysearch)
+
+      console.log(querySnapshot)
+      querySnapshot.forEach((doc) => {
+        const a: Wuserdata = usertoWuser(doc);
+        console.log(a)
+        temp.push(a);
+      });
+      // console.log('we got em! ',temp)
+
+
+    }
+    return temp;
+  } else {
+    console.log('IT WAS NULL!!')
+    return null;
+  }
+}
 
 export type Wuserdata = {
-  uid:string,
+  uid: string,
   avatarurl: string | null,
   contacts: string[] | null,
   friendID: string | null,
@@ -127,14 +160,48 @@ export type Wuserdata = {
   timestamp: number
 }
 
-export const usertoWuser = (userdata:any) =>{
-  const a:Wuserdata = {
-    uid:userdata.id,
-    avatarurl:userdata.data()['avatarurl'],
-    contacts:userdata.data()['contacts'],
-    friendID:userdata.data()['friendID'],
-    name:userdata.data()['name'],
-    timestamp:userdata.data()['timestamp']
+export type Wchat = {
+  uid: string,
+  chatname: string | null,
+  users: Wuserdata[] | null,
+  img: string | null,
+  isgroup: string | null
+}
+
+export const usertoWuser = (userdata: any) => {
+  const a: Wuserdata = {
+    uid: userdata.id,
+    avatarurl: userdata.data()['avatarurl'],
+    contacts: userdata.data()['contacts'],
+    friendID: userdata.data()['friendID'],
+    name: userdata.data()['name'],
+    timestamp: userdata.data()['timestamp']
   }
   return a;
+}
+
+export const chattoWchat = async (chatinfo: QueryDocumentSnapshot) => {
+  const asd: string[] = chatinfo.data()['users'];
+  console.log('chattowhat')
+  let result = null;
+  const e = await getusers(asd)
+  console.log('got users = ', e);
+  const a: Wchat = {
+    uid: chatinfo.id,
+    chatname: chatinfo.data()['chatname'],
+    img: chatinfo.data()['img'],
+    isgroup: chatinfo.data()['isgroup'],
+    users: !!e ? e : null
+  }
+  result = a;
+  return result;
+}
+
+export const getchatdata = async (chatid: string) => {
+  const docRef = doc(db, "chats", chatid);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    console.log("Document data:", docSnap.data());
+    return await chattoWchat(docSnap)
+  } return null;
 }

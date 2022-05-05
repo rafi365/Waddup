@@ -38,6 +38,7 @@ import { useParams } from "react-router";
 
 import "./Home.css";
 import "./Chatting.css";
+import { getchatdata } from "../firebaseConfig";
 
 const Chatting = () => {
   const params = useParams();
@@ -114,6 +115,14 @@ const Chatting = () => {
     }
   };
 
+  const urlvar = useParams<{chatID:string}>().chatID;
+  useEffect(() => {
+    console.log('firing getchatdata')
+    getchatdata(urlvar).then((e)=>{
+      console.log('chat',e)
+    });
+    console.log('done firing!');
+  }, []);
   return (
     <IonPage>
       <IonHeader>
@@ -124,7 +133,8 @@ const Chatting = () => {
 
           <IonTitle>
             <div className="chat-contact-details">
-              <p>Image & contact</p>
+              {/* <p>Image & contact</p> */}
+              <p>{urlvar}</p>
               <IonText color="medium">last seen today at 22:10</IonText>
             </div>
           </IonTitle>
@@ -168,6 +178,8 @@ const Chatting = () => {
           message={toastMessage}
           position="bottom"
         />
+
+        {/* put chat bubbles here */}
       </IonContent>
 
       <IonFooter className="chat-footer" id="chat-footer">

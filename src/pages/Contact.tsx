@@ -16,7 +16,6 @@ import {
   IonItemOptions,
   IonItemSliding,
   IonLabel,
-  IonList,
   IonMenuButton,
   IonModal,
   IonPage,
@@ -27,10 +26,11 @@ import {
   IonToast,
   IonToolbar,
 } from "@ionic/react";
-import { query, collection, where, getDocs, QuerySnapshot, documentId } from "firebase/firestore";
-import { ban, personAddOutline, searchOutline, trashBin } from "ionicons/icons";
+import { query, collection, where, getDocs, documentId, addDoc } from "firebase/firestore";
+import { personAddOutline, searchOutline, trashBin } from "ionicons/icons";
 import { useEffect, useRef, useState } from "react";
-import { addContact, db, deleteContact, getContactIDs, usertoWuser, Wuserdata } from "../firebaseConfig";
+import { useHistory } from "react-router";
+import { addContact, auth, db, deleteContact, getContactIDs, usertoWuser, Wuserdata } from "../firebaseConfig";
 import "./Home.css";
 
 const Contact: React.FC = () => {
@@ -107,6 +107,34 @@ const Contact: React.FC = () => {
   useEffect(() => {
     refreshcontact();
   }, []);
+  
+  const history = useHistory()
+  const createDM = async (targetUserUID:string) =>{
+    const querysearch = query(collection(db, "chats"), where("isgroup", "==", false),where('users', '==', [auth.currentUser!.uid,targetUserUID]));
+    const querySnapshot = await getDocs(querysearch);
+    let islooping = false;
+    let docid = null;
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, " => ", doc.data());
+      docid = doc.id;
+      islooping = true;
+    });
+    if(islooping){
+      history.replace('/chat/'+docid);
+    }else{
+      const docRef = await addDoc(collection(db, "chats"), {
+        chatname:null,
+        users:[auth.currentUser!.uid,targetUserUID],
+        img:null,
+        isgroup:false
+      });
+      docid = docRef.id;
+      history.replace('/chat/'+docid);
+      console.log("Document written with ID: ", docRef.id);
+    }
+  }
+
 
   return (
     <>
@@ -164,7 +192,7 @@ const Contact: React.FC = () => {
           {!!contactList ? contactList?.map((e) => {
             return (
               <IonItemSliding ref={slidingContactRef} key={e.uid}>
-                <IonItem color="secondary" lines="full" button>
+                <IonItem color="secondary" lines="full" onClick={()=>createDM(e.uid)}>
                   <IonThumbnail slot="start" className="ion-margin">
                     <IonAvatar>
                       <img src="https://media.discordapp.net/attachments/765461987718332416/962249598267687012/unknown.png" />

@@ -127,7 +127,7 @@ const App: React.FC = () => {
           <Route path="/tabs" component={Tabs} />
           <Route path="/login" component={Login} />
           <Route path="/signup" component={SignUp}/>
-          <Route path="/chat" component={Chatting}/>
+          <Route path="/chat/:chatID" component={Chatting}/>
           <Redirect exact from="/" to="/login" />
         </IonRouterOutlet>
       </IonReactRouter>
