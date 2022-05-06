@@ -3,14 +3,16 @@ import './Home.css';
 import { chatboxEllipsesOutline, searchOutline } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { auth, db } from '../firebaseConfig';
-import { onSnapshot, doc } from 'firebase/firestore';
+import { auth, chattoWchat_lite, db, getusers, Wchat, Wchat_lite, Wuserdata } from '../firebaseConfig';
+import { onSnapshot, doc, collection, query, where } from 'firebase/firestore';
 import NewUserConfig from '../components/NewUserConfig';
 
 const Home: React.FC = () => {
   const [isCreating, setIsCreating] = useState(false);
   const [isNewUser, setNewUser] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+  const [chats, setChats] = useState<Wchat_lite[]>();
+  const [userList, setUserList] = useState<Wuserdata[] | null>();
 
   const startCreatingHandler = () => {
     setIsCreating(true);
@@ -26,8 +28,38 @@ const Home: React.FC = () => {
       console.log("Current data: ", !doc.data());
       setNewUser(!doc.data())//true if not found
     });
-    return unsub; // unsubscribe on unmount
+    const q = query(collection(db, "chats"), where("users", "array-contains", auth.currentUser?.uid));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const temp: Wchat_lite[] = [];
+      querySnapshot.forEach((doc) => {
+        temp.push(chattoWchat_lite(doc));
+        console.log(temp);
+      });
+      setChats(temp);
+
+    });
+    return () => { unsub; unsubscribe }; // unsubscribe on unmount
   }, []);
+  useEffect(() => {
+    let mounted = true;
+    let users: string[] = [];
+    chats?.forEach((e) => {
+      if (!e.isgroup) {//if group false
+        const temp = e.users?.find((e) => e !== auth.currentUser?.uid)
+        if (temp) {
+          users.push(temp)
+        }
+      }
+      // console.log(users)
+    })
+    getusers(users).then((e) => {
+      if (mounted) {
+        // only try to update if we are subscribed (or mounted)
+        setUserList(e)
+      }
+    })
+    return () => { mounted = false }; // cleanup function
+  }, [chats]);
 
   return (
     <IonPage>
@@ -83,30 +115,29 @@ const Home: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonItem color='secondary' lines="full" button href='/chat'>
-          <IonThumbnail slot="start" className='ion-margin'>
-            <IonAvatar>
-              <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
-            </IonAvatar>
-          </IonThumbnail>
-          <IonLabel color='light' className='ion-margin'>
-            <IonText><strong>Nama Placeholder</strong></IonText><br />
-            <p>lorem ipsum dolor bae</p>
-            <p>12.00</p>
-          </IonLabel>
-        </IonItem>
-        <IonItem color='secondary' lines="full">
-          <IonThumbnail slot="start" className='ion-margin'>
-            <IonAvatar>
-              <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
-            </IonAvatar>
-          </IonThumbnail>
-          <IonLabel color='light' className='ion-margin'>
-            <IonText><strong>Nama Placeholder</strong></IonText><br />
-            <p>lorem ipsum dolor bae</p>
-            <p>12.00</p>
-          </IonLabel>
-        </IonItem>
+        {chats?.map((e) => {
+          let chatname: string | null | undefined = "";
+          if (e.isgroup) {
+            chatname = e.chatname
+          } else {
+            const t = e.users?.find(e => e !== auth.currentUser?.uid)
+            chatname = userList?.find(e => e.uid === t)?.name
+          }
+          return (
+            <IonItem key={e.chatuid} color='secondary' lines="full" button routerLink={`/chat/${e.chatuid}`}>
+              <IonThumbnail slot="start" className='ion-margin'>
+                <IonAvatar>
+                  <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
+                </IonAvatar>
+              </IonThumbnail>
+              <IonLabel color='light' className='ion-margin'>
+                <IonText><strong>{chatname}</strong></IonText><br />
+                <p>lorem ipsum dolor bae</p>
+                <p>12.00</p>
+              </IonLabel>
+            </IonItem>
+          )
+        })}
         <IonFab horizontal='end' vertical='bottom' slot='fixed'>
           <IonFabButton color='primary' onClick={startCreatingHandler}>
             <IonIcon icon={chatboxEllipsesOutline} />

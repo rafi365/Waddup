@@ -153,7 +153,8 @@ const Chatting = () => {
           <IonTitle>
             <div className="chat-contact-details">
               {/* <p>Image & contact</p> */}
-              <p>{urlvar}</p>
+              {/* <p>{urlvar}</p> */}
+              <p>{chatInfos?.isgroup ? chatInfos?.chatname : chatInfos?.users?.find(e => e.uid !== auth.currentUser?.uid)?.name}</p>
               <IonText color="medium">last seen today at 22:10</IonText>
             </div>
           </IonTitle>
@@ -206,7 +207,7 @@ const Chatting = () => {
             <p key={e.uid}>
               {chatInfos?.users?.find(a => a.uid === e.userUID)?.name}
               <br />
-              {time}{date}
+              {date} {time}
               <br />
               {e.text}
             </p>

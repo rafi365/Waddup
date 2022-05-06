@@ -124,20 +124,20 @@ export const getusers = async (users: string[] | null | undefined) => {
   // console.log('nani?! ',userarr?.length)
 
   if (!!userarr?.length) {//checks if string array is empty
-    console.log('IN!', userarr)
+    // console.log('IN!', userarr)
     let temp: Wuserdata[] = [];
     while (userarr.length) {
       // console.log(e.splice(0,10));
       const query_batch = userarr.splice(0, 10);// splits contacts list to get under the 10 per query limit
-      console.log('while ', query_batch)
+      // console.log('while ', query_batch)
       const querysearch = query(collection(db, "users"), where(documentId(), "in", query_batch));//WARNING ONLY 10 MAX QUERRIES(according to docs)
       // console.log('fired!')
       const querySnapshot = await getDocs(querysearch)
 
-      console.log(querySnapshot)
+      // console.log(querySnapshot)
       querySnapshot.forEach((doc) => {
         const a: Wuserdata = usertoWuser(doc);
-        console.log(a)
+        // console.log(a)
         temp.push(a);
       });
       // console.log('we got em! ',temp)
@@ -164,6 +164,13 @@ export type Wchat = {
   chatuid: string,
   chatname: string | null,
   users: Wuserdata[] | null,
+  img: string | null,
+  isgroup: string | null
+}
+export type Wchat_lite = {
+  chatuid: string,
+  chatname: string | null,
+  users: string[] | null,
   img: string | null,
   isgroup: string | null
 }
@@ -216,6 +223,18 @@ export const chattoWchat = async (chatinfo: QueryDocumentSnapshot) => {
   result = a;
   return result;
 }
+
+export const chattoWchat_lite = (chatinfo: QueryDocumentSnapshot) => {
+  const a: Wchat_lite = {
+    chatuid: chatinfo.id,
+    chatname: chatinfo.data()['chatname'],
+    img: chatinfo.data()['img'],
+    isgroup: chatinfo.data()['isgroup'],
+    users: chatinfo.data()['users']
+  }
+  return a;
+}
+
 
 export const getchatdata = async (chatid: string) => {
   const docRef = doc(db, "chats", chatid);
