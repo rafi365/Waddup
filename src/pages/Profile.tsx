@@ -2,11 +2,16 @@ import {
   IonBackButton,
   IonButton,
   IonButtons,
+  IonCard,
+  IonCardContent,
+  IonCol,
   IonContent,
+  IonGrid,
   IonHeader,
   IonIcon,
   IonLabel,
   IonPage,
+  IonRow,
   IonTitle,
   IonToolbar,
   useIonViewWillEnter,
@@ -15,12 +20,13 @@ import { signOut } from "firebase/auth";
 import { logOutOutline } from "ionicons/icons";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { auth, getusername } from "../firebaseConfig";
+import { auth, getusername, getuserid } from "../firebaseConfig";
 import "./Home.css";
 
 const Profile: React.FC = () => {
   const history = useHistory();
   const [name, setName] = useState('');
+  const [userId, setUserId] = useState('');
   const signout = () => signOut(auth).then(() => {
     // Sign-out successful.
     history.replace('/login');
@@ -30,6 +36,7 @@ const Profile: React.FC = () => {
   });
   useIonViewWillEnter(() => {
     getusername(auth.currentUser!.uid).then((a) => setName(a));
+    getuserid(auth.currentUser!.uid).then((a) => setUserId(a));
   });
   return (
     <IonPage>
@@ -48,7 +55,12 @@ const Profile: React.FC = () => {
             alt="#"
           />
           {/* <h1 className="ion-margin-top">Om Burhan</h1> */}
-          <h1 className="ion-margin-top">{name}</h1>
+          <IonRow className="ion-align-items-center">
+            <IonCol>
+              <h1 className="ion-margin-top">Name: {name}</h1>
+              <h3>UserId: <i>{userId}</i></h3>
+            </IonCol>
+          </IonRow>
           <h3><i>The "om jangan om" guy</i></h3>
         </div>
         <IonButton

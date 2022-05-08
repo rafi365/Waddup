@@ -105,6 +105,18 @@ export const getusername = async (userid: string) => {
   }
 }
 
+export const getuserid = async (userid: string) => {
+  const docSnap = await getDoc(doc(db, "users", userid));
+  if (docSnap.exists()) {
+    console.log("Document data:", docSnap.data().friendID);
+    return `${docSnap.data().friendID}`.toString();
+  } else {
+    // doc.data() will be undefined in this case
+    console.log("No such document!");
+    return "Unknown";
+  }
+}
+
 export const getContactIDs = async () => {
   const docSnap = await getDoc(doc(db, "users", auth.currentUser!.uid));
   if (docSnap.exists()) {
