@@ -25,6 +25,7 @@ import {
   IonThumbnail,
   IonAvatar,
   IonLabel,
+  IonItem,
 } from "@ionic/react";
 import {
   addOutline,
@@ -212,25 +213,26 @@ const Chatting = () => {
               const date = e.timestamp ? e.timestamp.toDate().toDateString() : "";
               return (
                 <IonCard key={e.uid}>
-                  <IonCardHeader>
-                    <IonThumbnail slot="start" className='ion-margin'>
-                      <IonAvatar>
-                        <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
-                      </IonAvatar>
-                    </IonThumbnail>
-                    <IonLabel>
-                      <IonText>
-                        {chatInfos?.users?.find(a => a.uid === e.userUID)?.name}
-                        <br />
-                        {date} {time}
-                      </IonText>
-                    </IonLabel>
-                    
-                  </IonCardHeader>
+                  {/* <IonCardHeader>  */}
+                    <IonItem>
+                      <IonThumbnail slot="start" className='ion-margin'>
+                        <IonAvatar>
+                          <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
+                        </IonAvatar>
+                      </IonThumbnail> 
+                      <IonLabel>
+                        <IonText>
+                          <strong>{chatInfos?.users?.find(a => a.uid === e.userUID)?.name}</strong>
+                          <br />
+                          {date} {time}
+                        </IonText>
+                      </IonLabel>
+                    </IonItem>
+                  {/* </IonCardHeader> */}
                   <IonCardContent>
-                    <p>
+                    <IonText>
                       {e.text}
-                    </p>
+                    </IonText>
                   </IonCardContent>
                 </IonCard>
 
