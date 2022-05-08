@@ -147,12 +147,12 @@ const Chatting = () => {
     console.log('done firing!');
   }, []);
 
-  const imgStyle = {
-    height: "45px",
-    width: "45px",
-    margin: "auto",
-    "border-radius": "50%"
-  }
+  // const imgStyle = {
+  //   height: "45px",
+  //   width: "45px",
+  //   margin: "auto",
+  //   "border-radius": "50%"
+  // }
 
 
 
@@ -222,9 +222,9 @@ const Chatting = () => {
                 <>
                 <IonItem>
                   <IonThumbnail slot="start">
-                    {/* <IonAvatar> */}
-                      <img style={imgStyle} src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
-                    {/* </IonAvatar> */}
+                    <IonAvatar>
+                      <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
+                    </IonAvatar>
                   </IonThumbnail> 
                   <IonLabel>
                     <p>
@@ -234,7 +234,7 @@ const Chatting = () => {
                     <p>{date} {time}</p>
                   </IonLabel>
                 </IonItem>
-                <IonCard className="chat-bubble" >
+                <IonCard className="chat-bubble" key={e.uid}>
                   <IonCardContent>
                     <h2>
                       <strong>{e.text}</strong>
