@@ -147,6 +147,13 @@ const Chatting = () => {
     console.log('done firing!');
   }, []);
 
+  const imgStyle = {
+    height: "45px",
+    width: "45px",
+    margin: "auto",
+    "border-radius": "50%"
+  }
+
 
 
   return (
@@ -214,10 +221,10 @@ const Chatting = () => {
               return (
                 <>
                 <IonItem>
-                  <IonThumbnail slot="start" >
-                    <IonAvatar>
-                      <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
-                    </IonAvatar>
+                  <IonThumbnail slot="start">
+                    {/* <IonAvatar> */}
+                      <img style={imgStyle} src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
+                    {/* </IonAvatar> */}
                   </IonThumbnail> 
                   <IonLabel>
                     <p>
