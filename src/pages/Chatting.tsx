@@ -230,8 +230,8 @@ const Chatting = () => {
                     <p>
                       <strong>{chatInfos?.users?.find(a => a.uid === e.userUID)?.name}</strong>
                       <br />
-                      <p>{date} {time}</p>
                     </p>
+                    <p>{date} {time}</p>
                   </IonLabel>
                 </IonItem>
                 <IonCard className="chat-bubble" >
