@@ -35,7 +35,8 @@ const NewUserConfig: React.FC = () => {
     "background-color": "gray"
   };
   const linkStylebox = {
-    margin: "1rem",
+    marginTop: "1rem",
+    marginBottom: "1rem",
     color: 'black',
     "background-color": "white"
   };

@@ -89,9 +89,9 @@ const SignUp: React.FC = () => {
           </IonRow>
           <IonRow className="ion-text-center moveto-signup">
             <IonCol className="ion-align-items-center">
-              <IonText>Already have account ?
+              <IonText>Already have an account ?
                 <Link to={'login'} style={linkStyle}>
-                  Sign In now !
+                  Sign in
                 </Link>
               </IonText>
             </IonCol>

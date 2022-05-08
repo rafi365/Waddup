@@ -213,7 +213,7 @@ const Contact: React.FC = () => {
                 </IonItemOptions>
               </IonItemSliding>
             )
-          }) : <h1>No Contacts yet</h1>}
+          }) : <h1 className="ion-padding">No Contacts yet</h1>}
           <IonFab horizontal="end" vertical="bottom" slot="fixed">
             <IonFabButton color="primary" onClick={startAddContactHandler}>
               <IonIcon icon={personAddOutline} />
