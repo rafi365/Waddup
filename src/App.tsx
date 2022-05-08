@@ -90,7 +90,7 @@ const App: React.FC = () => {
               <IonTitle className="ion-text-center">Menu</IonTitle>
             </IonToolbar>
           </IonHeader>
-          <IonContent color="medium">
+          <IonContent >
             <IonList>
               <IonMenuToggle>
                 <IonItem button routerLink="/tabs/profile">
