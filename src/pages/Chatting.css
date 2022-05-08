@@ -62,7 +62,7 @@
     clear: both;
 
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     transition: 0.2s all linear;
 }
 

@@ -212,39 +212,39 @@ const Chatting = () => {
               const time = e.timestamp ? e.timestamp.toDate().toLocaleTimeString() : "";
               const date = e.timestamp ? e.timestamp.toDate().toDateString() : "";
               return (
-                <IonCard key={e.uid}>
-                  {/* <IonCardHeader>  */}
-                    <IonItem>
-                      <IonThumbnail slot="start" className='ion-margin'>
-                        <IonAvatar>
-                          <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
-                        </IonAvatar>
-                      </IonThumbnail> 
-                      <IonLabel>
-                        <IonText>
-                          <strong>{chatInfos?.users?.find(a => a.uid === e.userUID)?.name}</strong>
-                          <br />
-                          {date} {time}
-                        </IonText>
-                      </IonLabel>
-                    </IonItem>
-                  {/* </IonCardHeader> */}
+                <>
+                <IonItem>
+                  <IonThumbnail slot="start" >
+                    <IonAvatar>
+                      <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
+                    </IonAvatar>
+                  </IonThumbnail> 
+                  <IonLabel>
+                    <p>
+                      <strong>{chatInfos?.users?.find(a => a.uid === e.userUID)?.name}</strong>
+                      <br />
+                      <p>{date} {time}</p>
+                    </p>
+                  </IonLabel>
+                </IonItem>
+                <IonCard className="chat-bubble" >
                   <IonCardContent>
-                    <IonText>
-                      {e.text}
-                    </IonText>
+                    <h2>
+                      <strong>{e.text}</strong>
+                    </h2>
                   </IonCardContent>
                 </IonCard>
 
-                // BAREBONE CHAT
-                // <p key={e.uid}>
-                //   {chatInfos?.users?.find(a => a.uid === e.userUID)?.name}
-                //   <br />
-                //   {date} {time}
-                //   <br />
-                //   {e.text}
-                // </p>
+                {/* BAREBONE CHAT
+                <p key={e.uid}>
+                {chatInfos?.users?.find(a => a.uid === e.userUID)?.name}
+                <br />
+                {date} {time}
+                <br />
+                 {e.text}
+                </p> */}
 
+                </>
               )
             })}
           
