@@ -9,15 +9,18 @@ import {
   IonGrid,
   IonHeader,
   IonIcon,
+  IonItem,
   IonLabel,
+  IonList,
   IonPage,
   IonRow,
+  IonText,
   IonTitle,
   IonToolbar,
   useIonViewWillEnter,
 } from "@ionic/react";
 import { signOut } from "firebase/auth";
-import { logOutOutline } from "ionicons/icons";
+import { logOutOutline, personSharp } from "ionicons/icons";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { auth, getusername, getuserid } from "../firebaseConfig";
@@ -50,19 +53,34 @@ const Profile: React.FC = () => {
       </IonHeader>
       <IonContent fullscreen color="medium">
         <div className="container">
+          <IonCard className="ion-padding" style={{borderRadius:"10px"}}>
           <img
             src="https://media.discordapp.net/attachments/926433926027808770/965095961418428476/IMG_20220410_233007.jpg?width=476&height=480"
             alt="#"
           />
           {/* <h1 className="ion-margin-top">Om Burhan</h1> */}
-          <IonRow className="ion-align-items-center">
-            <IonCol>
-              <h1 className="ion-margin-top">Name: {name}</h1>
-              <h3>UserId: <i>{userId}</i></h3>
-            </IonCol>
-          </IonRow>
-          <h3><i>The "om jangan om" guy</i></h3>
+        
+          <IonGrid className="center-info">
+            <IonRow>
+              <IonCol className="ion-align-items-center">
+              <IonList className="ion-text-center">
+                <IonItem>
+                  <IonTitle>Name: {name}</IonTitle>
+                </IonItem>
+                <IonItem> 
+                  <IonTitle>
+                    UserID:
+                    <IonText style={{fontStyle:"italic"}}> {userId}</IonText>
+                  </IonTitle>
+                </IonItem>
+              </IonList>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+          <IonTitle style={{fontStyle:"italic"}}>The "om jangan om" guy</IonTitle>
+          </IonCard>
         </div>
+
         <IonButton
           expand="block"
           className="ion-margin profile-button"
