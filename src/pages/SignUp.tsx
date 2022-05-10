@@ -1,7 +1,6 @@
 import { IonButton, IonCol, IonContent, IonGrid, IonInput, IonPage, IonRow, IonText, IonTitle, IonToast, useIonViewWillEnter } from '@ionic/react';
 import { createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import { useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { Link, useHistory } from 'react-router-dom';
 import { auth } from '../firebaseConfig';
 import './Home.css';
@@ -9,9 +8,10 @@ import './Home.css';
 const SignUp: React.FC = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const btnSignUp = useRef<HTMLIonButtonElement>(null);
-  const { register, handleSubmit } = useForm();
   const [toastMessage, setToastMessage] = useState('');
   const history = useHistory();
+  const emailref = useRef<HTMLIonInputElement>(null);
+  const passwordref = useRef<HTMLIonInputElement>(null);
   // onAuthStateChanged(auth, (user) => {
   //   if (user) {
   //     // User is signed in, see docs for a list of available properties
@@ -27,10 +27,13 @@ const SignUp: React.FC = () => {
       history.replace('/tabs/home');
     }
   });
-  const registerUser = (data: any) => {
-    console.log('creating a new user account with: ', data);
-    if (!!data['email'] && !!data['password']) {
-      createUserWithEmailAndPassword(auth, data['email'], data['password'])
+  const registerUser = (e: any) => {
+    e.preventDefault();
+    // console.log('creating a new user account with: ', data);
+    const email = emailref.current?.value?.toString();
+    const password = passwordref.current?.value?.toString();
+    if (!!email && !!password) {
+      createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           // Signed in 
           const user = userCredential.user;
@@ -66,15 +69,11 @@ const SignUp: React.FC = () => {
           </IonRow>
           <IonRow className='ion-justify-content-center'>
             <IonCol className="ion-align-items-center">
-              <form onSubmit={handleSubmit(registerUser)} className='ion-margin login_form '>
-                {/* <label>Name : </label>
-                  <input type="text" name="name"/>
-                  <label>User ID : </label>
-                  <input type="text" name="userId"/> */}
+              <form onSubmit={registerUser} className='ion-margin login_form '>
                 <label>Email: </label>
-                <IonInput type="email" {...register("email")} required className='inputcss' />
+                <IonInput type="email" ref={emailref} required className='inputcss' />
                 <label>Password: </label>
-                <IonInput type="password" {...register("password")} required className='inputcss' />
+                <IonInput type="password" ref={passwordref} required className='inputcss' />
                 <div className='btn ion-text-center'>
                   <IonButton
                     type='submit'
