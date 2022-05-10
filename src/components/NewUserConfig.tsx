@@ -32,13 +32,13 @@ const NewUserConfig: React.FC = () => {
   const linkStyle = {
     margin: "1rem",
     color: 'black',
-    "background-color": "gray"
+    backgroundColor: "gray"
   };
   const linkStylebox = {
     marginTop: "1rem",
     marginBottom: "1rem",
     color: 'black',
-    "background-color": "white"
+    backgroundColor: "white"
   };
 
   return (
