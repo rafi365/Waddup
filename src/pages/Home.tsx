@@ -1,4 +1,4 @@
-import { IonAvatar, IonBackButton, IonButton, IonButtons, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonMenuButton, IonModal, IonPage, IonRow, IonText, IonThumbnail, IonTitle, IonToast, IonToolbar, useIonViewWillEnter, useIonViewWillLeave } from '@ionic/react';
+import { IonAvatar, IonBackButton, IonButton, IonButtons, IonCheckbox, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonListHeader, IonMenuButton, IonModal, IonPage, IonRow, IonText, IonThumbnail, IonTitle, IonToast, IonToolbar, useIonViewWillEnter, useIonViewWillLeave } from '@ionic/react';
 import './Home.css';
 import { chatboxEllipsesOutline, searchOutline } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
@@ -6,6 +6,7 @@ import { useHistory } from 'react-router';
 import { auth, chattoWchat_lite, db, getusers, Wchat, Wchat_lite, Wuserdata } from '../firebaseConfig';
 import { onSnapshot, doc, collection, query, where } from 'firebase/firestore';
 import NewUserConfig from '../components/NewUserConfig';
+import { useForm } from 'react-hook-form';
 
 const Home: React.FC = () => {
   const [isCreating, setIsCreating] = useState(false);
@@ -60,7 +61,11 @@ const Home: React.FC = () => {
     })
     return () => { mounted = false }; // cleanup function
   }, [chats]);
-
+  const testarr = ['1', '1', '1', '1', '1', '1', '1', '1', '1', '1'];
+  const { register, handleSubmit } = useForm();
+  const ftest = (data: any) => {
+    console.log("FORM", data);
+  }
   return (
     <IonPage>
 
@@ -76,22 +81,49 @@ const Home: React.FC = () => {
       <IonModal isOpen={isCreating} backdropDismiss={false}>
         <IonHeader>
           <IonToolbar color='primary'>
-            <IonTitle>Create Chat Room</IonTitle>
+            <IonTitle>Create Group Chat</IonTitle>
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
-          <IonItem color='secondary' lines="full" button onClick={createChatRoom}>
-            <IonThumbnail slot="start" className='ion-margin'>
-              <IonAvatar>
-                <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
-              </IonAvatar>
-            </IonThumbnail>
-            <IonLabel color='light' className='ion-margin'>
-              <IonText><strong>Nama Placeholder</strong></IonText><br />
-              <p>lorem ipsum dolor bae</p>
+          <form onSubmit={handleSubmit(ftest)}>
+            <IonLabel>Group Name</IonLabel>
+            <IonInput required placeholder='Insert Group Name' {...register("gname")} />
 
-            </IonLabel>
-          </IonItem>
+            <IonList>
+              <IonListHeader>Contact list</IonListHeader>
+            <IonContent style={{height:"500px"}}>
+              {testarr.map((e, i) => {
+                return (
+                  <div key={i}>
+                    <label htmlFor={i.toString()}>
+                      <IonItem color='secondary' lines="full">
+                        <input type='checkbox' slot='start' {...register(i.toString(), {})} id={i.toString()} />
+                        <IonThumbnail slot="start" className='ion-margin' >
+                          <IonAvatar>
+                            <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
+                          </IonAvatar>
+                        </IonThumbnail>
+                        <IonLabel color='light' className='ion-margin'>
+                          <IonText><strong>Nama Placeholder {i}</strong></IonText><br />
+                          <p>lorem ipsum dolor bae</p>
+                        </IonLabel>
+                      </IonItem>
+                    </label>
+                  </div>
+                )
+              })}
+            </IonContent>
+
+            </IonList>
+            <IonButton
+              type='submit'
+              color="secondary"
+              className='ion-text-center'
+              expand='block'
+            > Make Group
+            </IonButton>
+          </form>
+
 
           <IonRow className='ion-text-center'>
             <IonCol>
