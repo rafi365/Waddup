@@ -97,7 +97,7 @@ const App: React.FC = () => {
                   <IonIcon slot="start" icon={personCircleOutline} />
                   <IonLabel>Profile</IonLabel>
                 </IonItem>
-                <IonItem>
+                <IonItem button routerLink="/tabs/faq">
                   <IonIcon slot="start" icon={helpCircleOutline} />
                   <IonLabel>FAQ</IonLabel>
                 </IonItem>

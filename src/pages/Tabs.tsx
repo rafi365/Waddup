@@ -8,6 +8,7 @@ import Contact from "../pages/Contact";
 import Profile from "./Profile";
 import Chatting from "./Chatting";
 import { auth } from "../firebaseConfig";
+import Faq from "./Faq";
 
 const Tabs = () => {
     const history = useHistory();
@@ -25,6 +26,7 @@ const Tabs = () => {
                     <Route path='/tabs/home' component={Home} />
                     <Route path='/tabs/contacts' component={Contact} />
                     <Route path="/tabs/profile" component={Profile} />
+                    <Route path="/tabs/faq" component={Faq} />
                     <Redirect exact path='/tabs' to='/tabs/home' />
                 </IonRouterOutlet>
                 <IonTabBar slot='bottom' color="primary">

@@ -37,9 +37,10 @@
 .container {
     text-align: center;
     position: absolute;
+    display: block;
     left: 0;
     right: 0;
-    top: 35%;
+    top: 40%;
     transform: translateY(-50%);
   }
 
