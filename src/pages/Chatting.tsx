@@ -26,6 +26,7 @@ import {
   IonAvatar,
   IonLabel,
   IonItem,
+  useIonViewDidEnter,
 } from "@ionic/react";
 import {
   addOutline,
@@ -140,6 +141,7 @@ const Chatting = () => {
         });
         // console.log(temp)
         setChatMessages(temp);
+        // scrolltobottom()
       });
       return unsub; // unsubscribe on unmount
     });
@@ -153,8 +155,18 @@ const Chatting = () => {
   //   margin: "auto",
   //   "border-radius": "50%"
   // }
+  useEffect(() => {
+    scrolltobottom();
+  }, [chatMessages]);
+  useIonViewDidEnter(()=>{
+    scrolltobottom();
+  })
+  const scrolltobottom = () =>{
+    const element = document.getElementById("bottomofchat");
+    element!.scrollIntoView(true);
 
 
+  }
 
   return (
     <IonPage>
@@ -254,6 +266,8 @@ const Chatting = () => {
                 </>
               )
             })}
+
+            <div id="bottomofchat"></div>
           
         
       </IonContent>
