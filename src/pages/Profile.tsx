@@ -3,15 +3,16 @@ import {
   IonButton,
   IonButtons,
   IonCard,
-  IonCardContent,
   IonCol,
   IonContent,
   IonGrid,
   IonHeader,
   IonIcon,
+  IonInput,
   IonItem,
   IonLabel,
   IonList,
+  IonModal,
   IonPage,
   IonRow,
   IonText,
@@ -20,8 +21,8 @@ import {
   useIonViewWillEnter,
 } from "@ionic/react";
 import { signOut } from "firebase/auth";
-import { logOutOutline, personSharp } from "ionicons/icons";
-import { useState } from "react";
+import { logOutOutline} from "ionicons/icons";
+import { useState} from "react";
 import { useHistory } from "react-router-dom";
 import { auth, getusername, getuserid } from "../firebaseConfig";
 import "./Home.css";
@@ -30,6 +31,13 @@ const Profile: React.FC = () => {
   const history = useHistory();
   const [name, setName] = useState('');
   const [userId, setUserId] = useState('');
+  const [modalProfile, setModalProfile] = useState(false);
+  const [status, setStatus] = useState(`The "om jangan om" guy`);
+
+  // const nameRef = useRef<HTMLIonInputElement>();
+  // const idRef = useRef<HTMLIonInputElement>();
+  // const statusRef = useRef<HTMLIonInputElement>();
+
   const signout = () => signOut(auth).then(() => {
     // Sign-out successful.
     history.replace('/login');
@@ -41,8 +49,43 @@ const Profile: React.FC = () => {
     getusername(auth.currentUser!.uid).then((a) => setName(a));
     getuserid(auth.currentUser!.uid).then((a) => setUserId(a));
   });
+
+  const modalHandler = () => {
+    if(modalProfile === false){
+      setModalProfile(true);
+    } else {
+      setModalProfile(false);
+    }
+    
+  }
+
   return (
     <IonPage>
+      <IonModal isOpen={modalProfile} backdropDismiss={false}>
+        <IonHeader>
+          <IonTitle className="ion-text-center ion-padding">Edit Profile</IonTitle>
+        </IonHeader>
+        <IonContent>
+        <IonList className="ion-text-center">
+                <IonItem>
+                  <IonLabel>Name:</IonLabel>
+                  <IonInput placeholder={name}/>
+                </IonItem>
+                <IonItem> 
+                  <IonLabel>
+                    UserID :
+                  </IonLabel>
+                  <IonInput placeholder={userId}/>
+                </IonItem>
+                <IonItem> 
+                  <IonLabel>Status:</IonLabel>
+                  <IonInput placeholder={status} />
+                </IonItem>
+              </IonList>
+        </IonContent>
+        <IonButton onClick={(modalHandler)} className="ion-margin">Save</IonButton>
+        <IonButton onClick={(modalHandler)} className="ion-margin">Cancel</IonButton>
+      </IonModal>
       <IonHeader>
         <IonToolbar color="primary">
           <IonButtons slot="start">
@@ -77,7 +120,8 @@ const Profile: React.FC = () => {
               </IonCol>
             </IonRow>
           </IonGrid>
-          <IonTitle style={{fontStyle:"italic"}}>The "om jangan om" guy</IonTitle>
+          <IonTitle style={{fontStyle:"italic"}}>{status}</IonTitle>
+          <IonButton className="ion-margin" onClick={(modalHandler)}>Edit</IonButton>
           </IonCard>
         </div>
 
