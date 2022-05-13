@@ -158,10 +158,10 @@ const Chatting = () => {
   useEffect(() => {
     scrolltobottom();
   }, [chatMessages]);
-  useIonViewDidEnter(()=>{
+  useIonViewDidEnter(() => {
     scrolltobottom();
   })
-  const scrolltobottom = () =>{
+  const scrolltobottom = () => {
     const element = document.getElementById("bottomofchat");
     element!.scrollIntoView(true);
 
@@ -226,50 +226,40 @@ const Chatting = () => {
         />
 
         {/* put chat bubbles here */}
-        
-            {chatMessages?.map((e) => {
-              const time = e.timestamp ? e.timestamp.toDate().toLocaleTimeString() : "";
-              const date = e.timestamp ? e.timestamp.toDate().toDateString() : "";
-              return (
-                <>
-                <IonItem>
-                  <IonThumbnail slot="start">
-                    <IonAvatar>
-                      <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
-                    </IonAvatar>
-                  </IonThumbnail> 
-                  <IonLabel>
-                    <p>
-                      <strong>{chatInfos?.users?.find(a => a.uid === e.userUID)?.name}</strong>
-                      <br />
-                    </p>
-                    <p>{date} {time}</p>
-                  </IonLabel>
-                </IonItem>
-                <IonCard className="chat-bubble" key={e.uid}>
-                  <IonCardContent>
-                    <h2>
-                      <strong>{e.text}</strong>
-                    </h2>
-                  </IonCardContent>
-                </IonCard>
 
-                {/* BAREBONE CHAT
-                <p key={e.uid}>
-                {chatInfos?.users?.find(a => a.uid === e.userUID)?.name}
-                <br />
-                {date} {time}
-                <br />
-                 {e.text}
-                </p> */}
+        {chatMessages?.map((e) => {
+          const time = e.timestamp ? e.timestamp.toDate().toLocaleTimeString() : "";
+          const date = e.timestamp ? e.timestamp.toDate().toDateString() : "";
+          return (
+            <div key={e.uid}>
+              <IonItem>
+                <IonThumbnail slot="start">
+                  <IonAvatar>
+                    <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
+                  </IonAvatar>
+                </IonThumbnail>
+                <IonLabel>
+                  <p>
+                    <strong>{chatInfos?.users?.find(a => a.uid === e.userUID)?.name}</strong>
+                    <br />
+                  </p>
+                  <p>{date} {time}</p>
+                </IonLabel>
+              </IonItem>
+              <IonCard className="chat-bubble">
+                <IonCardContent>
+                  <h2>
+                    <strong>{e.text}</strong>
+                  </h2>
+                </IonCardContent>
+              </IonCard>
+            </div>
+          )
+        })}
 
-                </>
-              )
-            })}
+        <div id="bottomofchat"></div>
 
-            <div id="bottomofchat"></div>
-          
-        
+
       </IonContent>
 
       <IonFooter className="chat-footer" id="chat-footer">
