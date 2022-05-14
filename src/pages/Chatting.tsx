@@ -163,10 +163,8 @@ const Chatting = () => {
     scrolltobottom();
   })
   const scrolltobottom = () => {
-    const element = document.getElementById("bottomofchat");
-    element!.scrollIntoView(true);
-
-
+    const element = document.getElementById("main-chat-content") as HTMLIonContentElement;
+    element.scrollToBottom(500)
   }
 
   return (
@@ -302,10 +300,6 @@ const Chatting = () => {
           //   </div>
           // )
         })}
-
-        <div id="bottomofchat"></div>
-
-
       </IonContent>
 
       <IonFooter className="chat-footer" id="chat-footer">
