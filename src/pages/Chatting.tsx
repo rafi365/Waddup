@@ -250,21 +250,23 @@ const Chatting = () => {
           } else {
             return (
               <div key={e.uid}>
-                {/* <IonItem className="chat-time">
+                {/* <IonItem >
                   <IonThumbnail slot="start">
                     <IonAvatar>
                       <img src="https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338"/>
                     </IonAvatar>
                   </IonThumbnail>
-                  <IonLabel>
-                    <p className="chat-time">
-                      <strong>{chatInfos?.users?.find(a => a.uid === e.userUID)?.name}</strong>
-                      <br />
-                    </p>
-                    <p className="chat-time">{date} {time}</p>
-                  </IonLabel>
+                  
                   
                 </IonItem> */}
+
+                <IonLabel className="chat-bubble-received">
+                  <p className="chat-time">
+                    <strong>{chatInfos?.users?.find(a => a.uid === e.userUID)?.name}</strong>
+                    <br />
+                  </p>
+                  {/* <p className="chat-time">{date} {time}</p> */}
+                </IonLabel>
                 <IonCard className="chat-bubble-received">
                   
                   <IonCardContent>
@@ -273,10 +275,7 @@ const Chatting = () => {
                     </h2>
                   </IonCardContent>
                   
-                    <p className="chat-time">
-                      <strong>{chatInfos?.users?.find(a => a.uid === e.userUID)?.name}</strong>
-                      <br />
-                    </p>
+                    
                     <p className="chat-time">{date} {time}</p>
                   
                   
