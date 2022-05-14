@@ -42,7 +42,8 @@ export async function addUser(name: string, friendID: string,) {
       timestamp: serverTimestamp(),
       name: name,
       friendID: friendID,
-      avatarurl: null
+      avatarurl: null,
+      status:"I'm new to Waddup!"
     });
 
     console.log("Document written with ID: ", docRef);
@@ -93,29 +94,41 @@ export async function deleteContact(friendID: string) {
   }
 }
 
-export const getusername = async (userid: string) => {
+export const getSingleUser = async (userid: string|undefined) => {
+  if(!userid){
+    return null;
+  }
   const docSnap = await getDoc(doc(db, "users", userid));
   if (docSnap.exists()) {
-    console.log("Document data:", docSnap.data().name);
-    return `${docSnap.data().name}`.toString();
+    return usertoWuser(docSnap)
   } else {
-    // doc.data() will be undefined in this case
-    console.log("No such document!");
-    return "Unknown";
+    return null;
   }
 }
 
-export const getuserid = async (userid: string) => {
-  const docSnap = await getDoc(doc(db, "users", userid));
-  if (docSnap.exists()) {
-    console.log("Document data:", docSnap.data().friendID);
-    return `${docSnap.data().friendID}`.toString();
-  } else {
-    // doc.data() will be undefined in this case
-    console.log("No such document!");
-    return "Unknown";
-  }
-}
+// export const getusername = async (userid: string) => {
+//   const docSnap = await getDoc(doc(db, "users", userid));
+//   if (docSnap.exists()) {
+//     console.log("Document data:", docSnap.data().name);
+//     return `${docSnap.data().name}`.toString();
+//   } else {
+//     // doc.data() will be undefined in this case
+//     console.log("No such document!");
+//     return "Unknown";
+//   }
+// }
+
+// export const getuserid = async (userid: string) => {
+//   const docSnap = await getDoc(doc(db, "users", userid));
+//   if (docSnap.exists()) {
+//     console.log("Document data:", docSnap.data().friendID);
+//     return `${docSnap.data().friendID}`.toString();
+//   } else {
+//     // doc.data() will be undefined in this case
+//     console.log("No such document!");
+//     return "Unknown";
+//   }
+// }
 
 export const getContactIDs = async () => {
   const docSnap = await getDoc(doc(db, "users", auth.currentUser!.uid));
@@ -169,7 +182,8 @@ export type Wuserdata = {
   contacts: string[] | null,
   friendID: string | null,
   name: string | null,
-  timestamp: number
+  timestamp: number|null,
+  status:string|null
 }
 
 export type Wchat = {
@@ -207,14 +221,15 @@ export const chatmessagetoWchatmessage = (chatmessage: QueryDocumentSnapshot) =>
 }
 
 
-export const usertoWuser = (userdata: any) => {
+export const usertoWuser = (userdata: QueryDocumentSnapshot) => {
   const a: Wuserdata = {
     uid: userdata.id,
     avatarurl: userdata.data()['avatarurl'],
     contacts: userdata.data()['contacts'],
     friendID: userdata.data()['friendID'],
     name: userdata.data()['name'],
-    timestamp: userdata.data()['timestamp']
+    timestamp: userdata.data()['timestamp'],
+    status: userdata.data()['status']
   }
   return a;
 }
@@ -255,4 +270,12 @@ export const getchatdata = async (chatid: string) => {
     console.log("Document data:", docSnap.data());
     return await chattoWchat(docSnap)
   } return null;
+}
+
+export const editProfile = async (name:string,status:string) => {
+  await updateDoc(doc(db, "users", auth.currentUser!.uid), {
+      name: name,
+      avatarurl: null,
+      status:status
+  });
 }

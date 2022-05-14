@@ -22,17 +22,17 @@ import {
 } from "@ionic/react";
 import { signOut } from "firebase/auth";
 import { logOutOutline} from "ionicons/icons";
-import { useState} from "react";
+import { useEffect, useState} from "react";
 import { useHistory } from "react-router-dom";
-import { auth, getusername, getuserid } from "../firebaseConfig";
+import { auth, editProfile, getSingleUser, Wuserdata } from "../firebaseConfig";
 import "./Home.css";
 
 const Profile: React.FC = () => {
   const history = useHistory();
-  const [name, setName] = useState('');
-  const [userId, setUserId] = useState('');
+  const [name, setName] = useState<string>();
+  const [status, setStatus] = useState<string>();
+  const [userInfo, setUserInfo] = useState<Wuserdata|null>(null);
   const [modalProfile, setModalProfile] = useState(false);
-  const [status, setStatus] = useState(`The "om jangan om" guy`);
 
   // const nameRef = useRef<HTMLIonInputElement>();
   // const idRef = useRef<HTMLIonInputElement>();
@@ -45,11 +45,22 @@ const Profile: React.FC = () => {
     // An error happened.
     console.log(error)
   });
-  useIonViewWillEnter(() => {
-    getusername(auth.currentUser!.uid).then((a) => setName(a));
-    getuserid(auth.currentUser!.uid).then((a) => setUserId(a));
-  });
+  useEffect(() => {
+    getSingleUser(auth.currentUser?.uid).then((e)=>{setUserInfo(e)})
+    
+  }, []);
+  useEffect(() => {
+    refreshUser();
+  }, [userInfo]);
 
+  // useIonViewWillEnter(() => {
+  //   getusername(auth.currentUser!.uid).then((a) => setName(a));
+  //   getuserid(auth.currentUser!.uid).then((a) => setUserId(a));
+  // });
+  const refreshUser = () =>{
+    setName(userInfo?.name? userInfo.name : "");
+    setStatus(userInfo?.status? userInfo.status : "");
+  }
   const modalHandler = () => {
     if(modalProfile === false){
       setModalProfile(true);
@@ -59,8 +70,18 @@ const Profile: React.FC = () => {
     
   }
 
+  const saveProfile = () =>{
+    const tname = name? name : "";
+    const tstatus = status? status : "";
+    editProfile(tname,tstatus).then((e)=>{
+      getSingleUser(auth.currentUser?.uid).then((e)=>{setUserInfo(e)})
+    })
+    modalHandler()
+  }
+
   return (
     <IonPage>
+
       <IonModal isOpen={modalProfile} backdropDismiss={false}>
         <IonHeader>
           <IonTitle className="ion-text-center ion-padding">Edit Profile</IonTitle>
@@ -69,23 +90,18 @@ const Profile: React.FC = () => {
         <IonList className="ion-text-center">
                 <IonItem>
                   <IonLabel>Name:</IonLabel>
-                  <IonInput placeholder={name}/>
-                </IonItem>
-                <IonItem> 
-                  <IonLabel>
-                    UserID :
-                  </IonLabel>
-                  <IonInput placeholder={userId}/>
+                  <IonInput value={name} onIonChange={(e)=>setName(e.detail.value! ? e.detail.value! : "")}/>
                 </IonItem>
                 <IonItem> 
                   <IonLabel>Status:</IonLabel>
-                  <IonInput placeholder={status} />
+                  <IonInput value={status} onIonChange={(e)=>setStatus(e.detail.value! ? e.detail.value! : "")}/>
                 </IonItem>
               </IonList>
         </IonContent>
-        <IonButton onClick={(modalHandler)} className="ion-margin">Save</IonButton>
+        <IonButton onClick={saveProfile} className="ion-margin">Save</IonButton>
         <IonButton onClick={(modalHandler)} className="ion-margin">Cancel</IonButton>
       </IonModal>
+
       <IonHeader>
         <IonToolbar color="primary">
           <IonButtons slot="start">
@@ -108,19 +124,19 @@ const Profile: React.FC = () => {
               <IonCol className="ion-align-items-center">
               <IonList className="ion-text-center">
                 <IonItem>
-                  <IonTitle>Name: {name}</IonTitle>
+                  <IonTitle>Name: {userInfo?.name}</IonTitle>
                 </IonItem>
                 <IonItem> 
                   <IonTitle>
-                    UserID:
-                    <IonText style={{fontStyle:"italic"}}> {userId}</IonText>
+                    Friend ID:
+                    <IonText style={{fontStyle:"italic"}}> {userInfo?.friendID}</IonText>
                   </IonTitle>
                 </IonItem>
               </IonList>
               </IonCol>
             </IonRow>
           </IonGrid>
-          <IonTitle style={{fontStyle:"italic"}}>{status}</IonTitle>
+          <IonTitle style={{fontStyle:"italic"}}>{!!userInfo?.status?.length? userInfo.status : <i>No status is set!</i>}</IonTitle>
           <IonButton className="ion-margin" onClick={(modalHandler)}>Edit</IonButton>
           </IonCard>
         </div>

@@ -177,7 +177,7 @@ const Home: React.FC = () => {
                         </IonThumbnail>
                         <IonLabel color='light' className='ion-margin'>
                           <IonText><strong>{e.name}</strong></IonText><br />
-                          <p>lorem ipsum dolor bae</p>
+                          <p>{e.status}</p>
                         </IonLabel>
                       </IonItem>
                     </label>
@@ -221,11 +221,13 @@ const Home: React.FC = () => {
       <IonContent fullscreen>
         {chats?.map((e) => {
           let chatname: string | null | undefined = "";
+          let userstatus: string | null | undefined = "";
           if (e.isgroup) {
             chatname = e.chatname
           } else {
             const t = e.users?.find(e => e !== auth.currentUser?.uid)
             chatname = userList?.find(e => e.uid === t)?.name
+            userstatus = userList?.find(e => e.uid === t)?.status
           }
           return (
             <IonItem key={e.chatuid} color='secondary' lines="full" button routerLink={`/chat/${e.chatuid}`}>
@@ -236,8 +238,8 @@ const Home: React.FC = () => {
               </IonThumbnail>
               <IonLabel color='light' className='ion-margin'>
                 <IonText><strong>{chatname}</strong></IonText><br />
-                <p>lorem ipsum dolor bae</p>
-                <p>12.00</p>
+                <p>{userstatus}</p>
+                {/* <p>12.00</p> */}
               </IonLabel>
             </IonItem>
           )

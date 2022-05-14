@@ -203,7 +203,7 @@ const Contact: React.FC = () => {
                       <strong>{e.name}</strong>
                     </IonText>
                     <br />
-                    <p>lorem ipsum dolor bae</p>
+                    <p>{e.status}</p>
                   </IonLabel>
                 </IonItem>
                 <IonItemOptions side="end">

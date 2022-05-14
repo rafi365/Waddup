@@ -181,7 +181,8 @@ const Chatting = () => {
               {/* <p>Image & contact</p> */}
               {/* <p>{urlvar}</p> */}
               <p>{chatInfos?.isgroup ? chatInfos?.chatname : chatInfos?.users?.find(e => e.uid !== auth.currentUser?.uid)?.name}</p>
-              <IonText color="medium">last seen today at 22:10</IonText>
+              {/* <IonText color="medium">last seen today at 22:10</IonText> */}
+              {chatInfos?.isgroup? "" : <IonText color="medium">{chatInfos?.users?.find(e => e.uid !== auth.currentUser?.uid)?.status}</IonText>}
             </div>
           </IonTitle>
 
