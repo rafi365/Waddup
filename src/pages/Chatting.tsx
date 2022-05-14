@@ -240,52 +240,42 @@ const Chatting = () => {
                     <h2>
                       <strong>{e.text}</strong>
                     </h2>
-                    
                   </IonCardContent>
                   <p className="chat-time">{date} {time}</p>
                 </IonCard>
-                
               </div>
             )
           } else {
             return (
               <div key={e.uid}>
-                {/* <IonItem >
+                {/* <IonItem className="chat-bubble-received">
                   <IonThumbnail slot="start">
                     <IonAvatar>
                       <img src="https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338"/>
                     </IonAvatar>
-                  </IonThumbnail>
-                  
-                  
-                </IonItem> */}
-
-                <IonLabel className="chat-bubble-received">
-                  <p className="chat-time">
-                    <strong>{chatInfos?.users?.find(a => a.uid === e.userUID)?.name}</strong>
-                    <br />
-                  </p>
-                  {/* <p className="chat-time">{date} {time}</p> */}
-                </IonLabel>
+                  </IonThumbnail> */}
+                  <IonLabel className="chat-bubble-received">
+                    <p className="chat-time">
+                      <strong>{chatInfos?.users?.find(a => a.uid === e.userUID)?.name}</strong>
+                      <br />
+                    </p>
+                  </IonLabel>
+                {/* </IonItem> */}
                 <IonCard className="chat-bubble-received">
-                  
                   <IonCardContent>
                     <h2>
                       <strong>{e.text}</strong>
                     </h2>
-                  </IonCardContent>
-                  
-                    
+                  </IonCardContent> 
                     <p className="chat-time">{date} {time}</p>
-                  
-                  
                 </IonCard>
                 
               </div>
               
             )
           } 
-
+          // LINEAR BUBBLE CHAT
+          
           // return (
           //   <div key={e.uid}>
           //     <IonItem>
