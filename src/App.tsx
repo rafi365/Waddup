@@ -101,10 +101,10 @@ const App: React.FC = () => {
                   <IonIcon slot="start" icon={helpCircleOutline} />
                   <IonLabel>FAQ</IonLabel>
                 </IonItem>
-                <IonItem>
+                {/* <IonItem>
                   <IonIcon slot="start" icon={settingsOutline} />
                   <IonLabel>Settings</IonLabel>
-                </IonItem>
+                </IonItem> */}
                 <IonItem>
                   <IonIcon slot="start" icon={moon} />
                   <IonLabel>Dark Mode</IonLabel>

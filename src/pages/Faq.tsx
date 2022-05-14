@@ -1,4 +1,5 @@
 import {
+  IonAvatar,
   IonBackButton,
   IonButtons,
   IonCard,
@@ -10,8 +11,12 @@ import {
   IonContent,
   IonGrid,
   IonHeader,
+  IonItem,
+  IonLabel,
   IonPage,
   IonRow,
+  IonText,
+  IonThumbnail,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
@@ -61,6 +66,65 @@ const Faq: React.FC = () => {
                 </IonCardContent>
               </IonCard>
             </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCard>
+              <IonCardHeader>
+                <IonCardTitle>Developer Team</IonCardTitle>
+              </IonCardHeader>
+              <IonCardContent>
+                <IonItem>
+                  <IonThumbnail slot="start" className="ion-margin">
+                    <IonAvatar>
+                      <img src="https://cdn.discordapp.com/attachments/938285633657532456/974593450731274260/edrick.png"/>
+                    </IonAvatar>
+                  </IonThumbnail>
+                  <IonLabel>
+                    <IonText>Edrick Sugiharto Putra</IonText>
+                  </IonLabel>
+                </IonItem>
+                <IonItem>
+                  <IonThumbnail slot="start" className="ion-margin">
+                    <IonAvatar>
+                      <img src="https://cdn.discordapp.com/attachments/938285633657532456/974593450945150976/fahmi1.jpg"/>
+                    </IonAvatar>
+                  </IonThumbnail>
+                  <IonLabel>
+                    <IonText>Fahmi Ihsan</IonText>
+                  </IonLabel>
+                </IonItem>
+                <IonItem>
+                  <IonThumbnail slot="start" className="ion-margin">
+                    <IonAvatar>
+                      <img src="https://cdn.discordapp.com/attachments/938285633657532456/974593451175866368/zidane.jpg"/>
+                    </IonAvatar>
+                  </IonThumbnail>
+                  <IonLabel>
+                    <IonText>Moh Rizki Zidane</IonText>
+                  </IonLabel>
+                </IonItem>
+                <IonItem>
+                  <IonThumbnail slot="start" className="ion-margin">
+                    <IonAvatar>
+                      <img src="https://cdn.discordapp.com/attachments/938285633657532456/974593450311839754/nayfos.jpg"/>
+                    </IonAvatar>
+                  </IonThumbnail>
+                  <IonLabel>
+                    <IonText>Muhammad Rafi Sofyan</IonText>
+                  </IonLabel>
+                </IonItem>
+                <IonItem>
+                  <IonThumbnail slot="start" className="ion-margin">
+                    <IonAvatar>
+                      <img src="https://cdn.discordapp.com/attachments/938285633657532456/974593450513158154/umar.jpg"/>
+                    </IonAvatar>
+                  </IonThumbnail>
+                  <IonLabel>
+                    <IonText>Umar Haqi</IonText>
+                  </IonLabel>
+                </IonItem>
+              </IonCardContent>
+            </IonCard>
           </IonRow>
         </IonGrid>
       </IonContent>
