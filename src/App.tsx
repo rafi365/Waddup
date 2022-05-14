@@ -52,16 +52,40 @@ import Chatting from "./pages/Chatting";
 import { useEffect, useState } from "react";
 import { auth } from "./firebaseConfig";
 import { User } from "firebase/auth";
+import { Storage } from '@capacitor/storage';
 
 setupIonicReact();
 
-const toggleDarkModeHandler = () => {
-  document.body.classList.toggle("dark");
-};
 
 const App: React.FC = () => {
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
+  const [darkToggle, setDarkToggle] = useState(false);
+
+  const setDarkToggleToStorage = async (togglestate:boolean) => {
+    const toggle = togglestate? "True" : "False"
+    await Storage.set({
+      key: 'DarkModeToggleState',
+      value: toggle,
+    });
+  };
+  
+  const getDarkToggleInStorage = async () => {
+    const { value } = await Storage.get({ key: 'DarkModeToggleState' });
+  
+    // console.log(`Hello ${value}!`);
+    const res = value === "True"? true : false
+    setDarkToggle(res);
+  };
+
+  const toggleDarkModeHandler = () => {
+    const inverse = !darkToggle //prevent any async quirks by updating with the same const
+    setDarkToggleToStorage(inverse)
+    setDarkToggle(inverse);
+  };
+  useEffect(() => {
+    console.log(document.body.classList.toggle("dark",darkToggle));
+  }, [darkToggle]);
   const [user, setUser] = useState<User|null|undefined>();
 
   // Handle user state changes
@@ -71,6 +95,7 @@ const App: React.FC = () => {
   }
 
   useEffect(() => {
+    getDarkToggleInStorage();
     const subscriber = auth.onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
   }, []);
@@ -112,6 +137,7 @@ const App: React.FC = () => {
                     slot="end"
                     name="darkMode"
                     onIonChange={toggleDarkModeHandler}
+                    checked={darkToggle}
                   />
                 </IonItem>
               </IonMenuToggle>
