@@ -1,9 +1,10 @@
-import { IonCol, IonContent, IonGrid, IonPage, IonRow, IonTitle, IonText, IonButton, IonInput, IonToast, useIonViewWillEnter, IonHeader, IonModal, IonToolbar } from '@ionic/react';
+import { IonCol, IonContent, IonGrid, IonPage, IonRow, IonTitle, IonText, IonButton, IonInput, IonToast, useIonViewWillEnter, IonHeader, IonModal, IonToolbar, IonItemDivider, IonLabel, IonIcon } from '@ionic/react';
 import { useRef, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import './Home.css';
-import { onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
+import { GoogleAuthProvider, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
+import { logoGoogle } from 'ionicons/icons';
 
 const Login: React.FC = () => {
   const history = useHistory();
@@ -12,6 +13,7 @@ const Login: React.FC = () => {
   const resetemailref = useRef<HTMLIonInputElement>(null);
   const emailref = useRef<HTMLIonInputElement>(null);
   const passwordref = useRef<HTMLIonInputElement>(null);
+  const provider = new GoogleAuthProvider();
   // onAuthStateChanged(auth, (user) => {
   //   if (user) {
   //     // User is signed in, see docs for a list of available properties
@@ -52,6 +54,20 @@ const Login: React.FC = () => {
       setToastMessage('Input box is blank!');
     }
   }
+  const signInWithGoogle = () => {
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        history.replace('/tabs/home');
+      }).catch((error) => {
+        console.log("Signin Failed!");
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode);
+        console.log(errorMessage);
+        setToastMessage(errorMessage);
+      });
+  };
+
 
   const doresetpass = (e: any) => {
     e.preventDefault();
@@ -84,6 +100,20 @@ const Login: React.FC = () => {
           <IonRow className="ion-text-center">
             <IonCol className="ion-align-items-center">
               <IonTitle className='app-title'>Waddup</IonTitle>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <IonButton
+                onClick={() => signInWithGoogle()}
+                color="secondary"
+                className='ion-text-center'
+                expand='block'
+              >
+                <IonIcon icon={logoGoogle} className='ion-padding-end' />Login With Google
+              </IonButton>
+
+              <IonItemDivider color='primary'></IonItemDivider>
             </IonCol>
           </IonRow>
           <IonRow className='ion-justify-content-center'>
