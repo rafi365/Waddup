@@ -1,4 +1,4 @@
-import { IonAvatar, IonBackButton, IonButton, IonButtons, IonCheckbox, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonListHeader, IonMenuButton, IonModal, IonPage, IonRow, IonText, IonThumbnail, IonTitle, IonToast, IonToolbar, useIonViewWillEnter, useIonViewWillLeave } from '@ionic/react';
+import { IonAvatar, IonBackButton, IonButton, IonButtons, IonCheckbox, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonListHeader, IonMenuButton, IonModal, IonPage, IonRow, IonSearchbar, IonText, IonThumbnail, IonTitle, IonToast, IonToolbar, useIonViewWillEnter, useIonViewWillLeave } from '@ionic/react';
 import './Home.css';
 import { chatboxEllipsesOutline, searchOutline } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
@@ -11,6 +11,8 @@ import { useForm } from 'react-hook-form';
 const Home: React.FC = () => {
   const [isCreating, setIsCreating] = useState(false);
   const [isNewUser, setNewUser] = useState(false);
+  const [isSearch, setIsSearch] = useState(false);
+  const [searchText, setSearchText] = useState('');
   const [toastMessage, setToastMessage] = useState('');
   const [chats, setChats] = useState<Wchat_lite[]>();
   const [userList, setUserList] = useState<Wuserdata[] | null>();
@@ -39,9 +41,9 @@ const Home: React.FC = () => {
           }).catch((e) => {
             console.log(e);
           })
-          
+
         }
-      }else{
+      } else {
         setContactList(undefined);
       }
     })
@@ -95,11 +97,11 @@ const Home: React.FC = () => {
     })
     return () => { mounted = false }; // cleanup function
   }, [chats]);
-  
+
   const { register, handleSubmit } = useForm();
   const history = useHistory()
-  const createGroup = async (targetUserUID:string[],chatname:string) =>{
-    const querysearch = query(collection(db, "chats"), where("isgroup", "==", false),where('users', '==', [auth.currentUser!.uid].concat(targetUserUID)));
+  const createGroup = async (targetUserUID: string[], chatname: string) => {
+    const querysearch = query(collection(db, "chats"), where("isgroup", "==", false), where('users', '==', [auth.currentUser!.uid].concat(targetUserUID)));
     const querySnapshot = await getDocs(querysearch);
     let islooping = false;
     let docid = null;
@@ -109,34 +111,34 @@ const Home: React.FC = () => {
       docid = doc.id;
       islooping = true;
     });
-    if(islooping){
-      history.replace('/chat/'+docid);
-    }else{
+    if (islooping) {
+      history.replace('/chat/' + docid);
+    } else {
       const docRef = await addDoc(collection(db, "chats"), {
-        chatname:chatname,
-        users:[auth.currentUser!.uid].concat(targetUserUID),
-        img:null,
-        isgroup:true
+        chatname: chatname,
+        users: [auth.currentUser!.uid].concat(targetUserUID),
+        img: null,
+        isgroup: true
       });
       docid = docRef.id;
-      history.replace('/chat/'+docid);
+      history.replace('/chat/' + docid);
       console.log("Document written with ID: ", docRef.id);
     }
   }
   const makeGroupHandler = (data: any) => {
     setIsCreating(false);
-    const result = contactList?.flatMap((e)=>
+    const result = contactList?.flatMap((e) =>
       (!!data[e.uid]) ? [e.uid] : []
     )
-    if(result?.length){
-      createGroup(result,data["gname"]);
+    if (result?.length) {
+      createGroup(result, data["gname"]);
 
-    }else{
+    } else {
       setToastMessage('Please add at least 1 contact to the group!');
     }
     console.log("FORM", result);
     // console.log(data);
-    
+
   }
   return (
     <IonPage>
@@ -163,28 +165,28 @@ const Home: React.FC = () => {
 
             <IonList>
               <IonListHeader>Contact list</IonListHeader>
-            <IonContent style={{height:"500px"}}>
-              {!!contactList? contactList?.map((e) => {
-                return (
-                  <div key={e.uid}>
-                    <label htmlFor={e.uid!.toString()}>
-                      <IonItem color='secondary' lines="full">
-                        <input type='checkbox' slot='start' {...register(e.uid!.toString(), {})} id={e.uid!.toString()} />
-                        <IonThumbnail slot="start" className='ion-margin' >
-                          <IonAvatar>
-                            <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
-                          </IonAvatar>
-                        </IonThumbnail>
-                        <IonLabel color='light' className='ion-margin'>
-                          <IonText><strong>{e.name}</strong></IonText><br />
-                          <p>{e.status}</p>
-                        </IonLabel>
-                      </IonItem>
-                    </label>
-                  </div>
-                )
-              }) : <h1>No Contacts!</h1>}
-            </IonContent>
+              <IonContent style={{ height: "500px" }}>
+                {!!contactList ? contactList?.map((e) => {
+                  return (
+                    <div key={e.uid}>
+                      <label htmlFor={e.uid!.toString()}>
+                        <IonItem color='secondary' lines="full">
+                          <input type='checkbox' slot='start' {...register(e.uid!.toString(), {})} id={e.uid!.toString()} />
+                          <IonThumbnail slot="start" className='ion-margin' >
+                            <IonAvatar>
+                              <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
+                            </IonAvatar>
+                          </IonThumbnail>
+                          <IonLabel color='light' className='ion-margin'>
+                            <IonText><strong>{e.name}</strong></IonText><br />
+                            <p>{e.status}</p>
+                          </IonLabel>
+                        </IonItem>
+                      </label>
+                    </div>
+                  )
+                }) : <h1>No Contacts!</h1>}
+              </IonContent>
 
             </IonList>
             <IonButton
@@ -206,17 +208,25 @@ const Home: React.FC = () => {
         </IonContent>
       </IonModal>
       <IonHeader>
-        <IonToolbar color='primary'>
-          <IonButtons slot='start'>
-            <IonMenuButton />
-          </IonButtons>
-          <IonTitle className='cus_font'>Waddup</IonTitle>
-          <IonButtons slot='end' className='ion-margin'>
-            <IonButton slot='icon-only'>
-              <IonIcon icon={searchOutline} />
-            </IonButton>
-          </IonButtons>
-        </IonToolbar>
+        {isSearch ?
+          <IonToolbar>
+            <IonSearchbar value={searchText} onIonChange={e => setSearchText(e.detail.value!)} inputmode="search" showCancelButton='always' onIonCancel={() => setIsSearch(false)}></IonSearchbar>
+          </IonToolbar>
+
+          :
+
+          <IonToolbar color='primary'>
+            <IonButtons slot='start'>
+              <IonMenuButton />
+            </IonButtons>
+            <IonTitle className='cus_font'>Waddup</IonTitle>
+            <IonButtons slot='end' className='ion-margin'>
+              <IonButton slot='icon-only' onClick={() => setIsSearch(true)}>
+                <IonIcon icon={searchOutline} />
+              </IonButton>
+            </IonButtons>
+          </IonToolbar>}
+
       </IonHeader>
       <IonContent fullscreen>
         {chats?.map((e) => {
@@ -229,20 +239,25 @@ const Home: React.FC = () => {
             chatname = userList?.find(e => e.uid === t)?.name
             userstatus = userList?.find(e => e.uid === t)?.status
           }
-          return (
-            <IonItem key={e.chatuid} color='secondary' lines="full" button routerLink={`/chat/${e.chatuid}`}>
-              <IonThumbnail slot="start" className='ion-margin'>
-                <IonAvatar>
-                  <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
-                </IonAvatar>
-              </IonThumbnail>
-              <IonLabel color='light' className='ion-margin'>
-                <IonText><strong>{chatname}</strong></IonText><br />
-                <p>{userstatus}</p>
-                {/* <p>12.00</p> */}
-              </IonLabel>
-            </IonItem>
-          )
+          if (chatname?.toLowerCase().includes(searchText.toLowerCase())) {
+            return (
+              <IonItem key={e.chatuid} color='secondary' lines="full" button routerLink={`/chat/${e.chatuid}`}>
+                <IonThumbnail slot="start" className='ion-margin'>
+                  <IonAvatar>
+                    <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
+                  </IonAvatar>
+                </IonThumbnail>
+                <IonLabel color='light' className='ion-margin'>
+                  <IonText><strong>{chatname}</strong></IonText><br />
+                  <p>{userstatus}</p>
+                  {/* <p>12.00</p> */}
+                </IonLabel>
+              </IonItem>
+            )
+          }
+          else {
+            return (<></>);
+          }
         })}
         <IonFab horizontal='end' vertical='bottom' slot='fixed'>
           <IonFabButton color='primary' onClick={startCreatingHandler}>
