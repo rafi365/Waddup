@@ -256,7 +256,7 @@ const Home: React.FC = () => {
             )
           }
           else {
-            return (<></>);
+            return (null);
           }
         })}
         <IonFab horizontal='end' vertical='bottom' slot='fixed'>

@@ -27,6 +27,7 @@ import {
   IonLabel,
   IonItem,
   useIonViewDidEnter,
+  IonSearchbar,
 } from "@ionic/react";
 import {
   addOutline,
@@ -34,6 +35,7 @@ import {
   callOutline,
   cameraOutline,
   micOutline,
+  searchOutline,
   send,
   shareOutline,
   starOutline,
@@ -65,6 +67,9 @@ const Chatting = () => {
   const [chatInfos, setChatInfos] = useState<Wchat | null>();
   const [chatboxtext, setChatboxtext] = useState<string>("");
   const [chatMessages, setChatMessages] = useState<Wchatmessage[]>();
+
+  const [isSearch, setIsSearch] = useState(false);
+  const [searchText, setSearchText] = useState('');
 
   const actionSheetButtons = [
     {
@@ -171,45 +176,49 @@ const Chatting = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar color="primary">
-          <IonButtons slot="start">
-            <IonBackButton defaultHref="/tabs/home" />
-          </IonButtons>
+          {isSearch ?
 
-          <IonTitle>
-            <div className="chat-contact-details">
-              {/* <p>Image & contact</p> */}
-              {/* <p>{urlvar}</p> */}
-              <p>{chatInfos?.isgroup ? chatInfos?.chatname : chatInfos?.users?.find(e => e.uid !== auth.currentUser?.uid)?.name}</p>
-              {/* <IonText color="medium">last seen today at 22:10</IonText> */}
-              {chatInfos?.isgroup? "" : <IonText color="medium">{chatInfos?.users?.find(e => e.uid !== auth.currentUser?.uid)?.status}</IonText>}
-            </div>
-          </IonTitle>
+            <IonSearchbar value={searchText} onIonChange={e => setSearchText(e.detail.value!)} inputmode="search" showCancelButton='always' onIonCancel={() => { setIsSearch(false); scrolltobottom() }}></IonSearchbar>
+            :
+            <>
+              <IonButtons slot="start">
+                <IonBackButton defaultHref="/tabs/home" />
+              </IonButtons>
+              <IonTitle>
+                <div className="chat-contact-details">
+                  {/* <p>Image & contact</p> */}
+                  {/* <p>{urlvar}</p> */}
+                  <p>{chatInfos?.isgroup ? chatInfos?.chatname : chatInfos?.users?.find(e => e.uid !== auth.currentUser?.uid)?.name}</p>
+                  {/* <IonText color="medium">last seen today at 22:10</IonText> */}
+                  {chatInfos?.isgroup ? "" : <IonText color="medium">{chatInfos?.users?.find(e => e.uid !== auth.currentUser?.uid)?.status}</IonText>}
+                </div>
+              </IonTitle>
 
-          <IonButtons slot="end">
-            <IonButton
-              fill="clear"
-              onClick={() =>
-                toaster(
-                  "As this is a UI only, video calling wouldn't work here."
-                )
-              }
-            >
-              <IonIcon icon={videocamOutline} />
-            </IonButton>
+              <IonButtons slot="end">
+                <IonButton
+                  fill="clear"
+                  onClick={() =>
+                    setIsSearch(true)
+                  }
+                >
+                  <IonIcon icon={searchOutline} />
+                </IonButton>
 
-            <IonButton
-              fill="clear"
-              onClick={() =>
-                toaster("As this is a UI only, calling wouldn't work here.")
-              }
-            >
-              <IonIcon icon={callOutline} />
-            </IonButton>
-          </IonButtons>
+                <IonButton
+                  fill="clear"
+                  onClick={() =>
+                    toaster("As this is a UI only, calling wouldn't work here.")
+                  }
+                >
+                  <IonIcon icon={callOutline} />
+                </IonButton>
+              </IonButtons>
+            </>
+          }
         </IonToolbar>
       </IonHeader>
 
-      <IonContent  id="main-chat-content">
+      <IonContent id="main-chat-content">
         <IonActionSheet
           header="Message Actions"
           isOpen={showActionSheet}
@@ -230,50 +239,54 @@ const Chatting = () => {
         {chatMessages?.map((e) => {
           const time = e.timestamp ? e.timestamp.toDate().toLocaleTimeString() : "";
           const date = e.timestamp ? e.timestamp.toDate().toDateString() : "";
-          if(auth.currentUser?.uid == e.userUID){
-            return(
-              <div key={e.uid} >
-                <IonCard color="primary" className="chat-bubble-sent">
-                  <IonCardContent >
-                    <h2>
-                      <strong>{e.text}</strong>
-                    </h2>
-                  </IonCardContent>
-                  <p className="chat-time">{date} {time}</p>
-                </IonCard>
-              </div>
-            )
-          } else {
-            return (
-              <div key={e.uid}>
-                {/* <IonItem className="chat-bubble-received">
-                  <IonThumbnail slot="start">
-                    <IonAvatar>
-                      <img src="https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338"/>
-                    </IonAvatar>
-                  </IonThumbnail> */}
+          if (e.text?.toLowerCase().includes(searchText.toLowerCase())) {
+            if (auth.currentUser?.uid == e.userUID) {
+              return (
+                <div key={e.uid} >
+                  <IonCard color="primary" className="chat-bubble-sent">
+                    <IonCardContent >
+                      <h2>
+                        <strong>{e.text}</strong>
+                      </h2>
+                    </IonCardContent>
+                    <p className="chat-time">{date} {time}</p>
+                  </IonCard>
+                </div>
+              )
+            } else {
+              return (
+                <div key={e.uid}>
+                  {/* <IonItem className="chat-bubble-received">
+                    <IonThumbnail slot="start">
+                      <IonAvatar>
+                        <img src="https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338"/>
+                      </IonAvatar>
+                    </IonThumbnail> */}
                   <IonLabel className="chat-bubble-received">
                     <p className="chat-time">
                       <strong>{chatInfos?.users?.find(a => a.uid === e.userUID)?.name}</strong>
                       <br />
                     </p>
                   </IonLabel>
-                {/* </IonItem> */}
-                <IonCard className="chat-bubble-received">
-                  <IonCardContent>
-                    <h2>
-                      <strong>{e.text}</strong>
-                    </h2>
-                  </IonCardContent> 
+                  {/* </IonItem> */}
+                  <IonCard className="chat-bubble-received">
+                    <IonCardContent>
+                      <h2>
+                        <strong>{e.text}</strong>
+                      </h2>
+                    </IonCardContent>
                     <p className="chat-time">{date} {time}</p>
-                </IonCard>
-                
-              </div>
-              
-            )
-          } 
+                  </IonCard>
+
+                </div>
+
+              )
+            }
+          } else {
+            return (null)
+          }
           // LINEAR BUBBLE CHAT
-          
+
           // return (
           //   <div key={e.uid}>
           //     <IonItem>
