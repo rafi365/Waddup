@@ -172,6 +172,20 @@ const Chatting = () => {
     element.scrollToBottom(500)
   }
 
+  const stringToColour = (str:string) => {
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    var colour = '#';
+    for (var i = 0; i < 3; i++) {
+      var value = (hash >> (i * 8)) & 0xFF;
+      colour += ('00' + value.toString(16)).substr(-2);
+    }
+    return colour;
+  }
+
+
   return (
     <IonPage>
       <IonHeader>
@@ -264,7 +278,8 @@ const Chatting = () => {
                     </IonThumbnail> */}
                   <IonLabel className="chat-bubble-received">
                     <p className="chat-time">
-                      <strong>{chatInfos?.users?.find(a => a.uid === e.userUID)?.name}</strong>
+                      {/* note: json stringify is to make the string more random but still the same everytime */}
+                      <strong style={{color: stringToColour(e.userUID?JSON.stringify(e.userUID) : "grey")}}>{chatInfos?.users?.find(a => a.uid === e.userUID)?.name}</strong>
                       <br />
                     </p>
                   </IonLabel>
