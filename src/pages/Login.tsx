@@ -2,9 +2,10 @@ import { IonCol, IonContent, IonGrid, IonPage, IonRow, IonTitle, IonText, IonBut
 import { useRef, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import './Home.css';
-import { GoogleAuthProvider, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider, onAuthStateChanged, sendPasswordResetEmail, signInWithCredential, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
 import { logoGoogle } from 'ionicons/icons';
+import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 
 const Login: React.FC = () => {
   const history = useHistory();
@@ -13,7 +14,6 @@ const Login: React.FC = () => {
   const resetemailref = useRef<HTMLIonInputElement>(null);
   const emailref = useRef<HTMLIonInputElement>(null);
   const passwordref = useRef<HTMLIonInputElement>(null);
-  const provider = new GoogleAuthProvider();
   // onAuthStateChanged(auth, (user) => {
   //   if (user) {
   //     // User is signed in, see docs for a list of available properties
@@ -54,9 +54,28 @@ const Login: React.FC = () => {
       setToastMessage('Input box is blank!');
     }
   }
-  const signInWithGoogle = () => {
-    signInWithPopup(auth, provider)
-      .then((result) => {
+  const signInWithGoogle = async () => {
+    //USING NATIVE JAVASCRIPT FIREBASE SDK
+    // const provider = new GoogleAuthProvider();
+    // signInWithPopup(auth, provider)
+    // .then((result) => {
+    //   history.replace('/tabs/home');
+    // }).catch((error) => {
+    //   console.log("Signin Failed!");
+    //   const errorCode = error.code;
+    //   const errorMessage = error.message;
+    //   console.log(errorCode);
+    //   console.log(errorMessage);
+    //   setToastMessage(errorMessage);
+    // });
+
+    //USING CAPACITOR FIREBASE SDK
+    // 1. Create credentials on the native layer
+    const result = await FirebaseAuthentication.signInWithGoogle();
+    // 2. Sign in on the web layer using the id token
+    const credential = GoogleAuthProvider.credential(result.credential?.idToken);
+    signInWithCredential(auth, credential)
+    .then(() => {
         history.replace('/tabs/home');
       }).catch((error) => {
         console.log("Signin Failed!");

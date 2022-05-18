@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package com.umn.waddup;
 
 import com.getcapacitor.BridgeActivity;
 

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "697022643939",
+    "project_id": "waddup-b49eb",
+    "storage_bucket": "waddup-b49eb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:697022643939:android:6a7960eb05cfa33abdcfd6",
+        "android_client_info": {
+          "package_name": "com.umn.waddup"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "697022643939-2pou81h0nv7lnc6kklitccl4td1qcsr1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.umn.waddup",
+            "certificate_hash": "a0c512d89f33303660ae640ee10095baa8880cea"
+          }
+        },
+        {
+          "client_id": "697022643939-8japmtfkumlhvhh95umkikaob2ebbogj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-764SyE6P5ddzL36UAMlItghQlm63Nac"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "697022643939-8japmtfkumlhvhh95umkikaob2ebbogj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
