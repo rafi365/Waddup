@@ -229,7 +229,7 @@ const Home: React.FC = () => {
 
       </IonHeader>
       <IonContent fullscreen>
-        {chats?.map((e) => {
+        {chats?.length? chats?.map((e) => {
           let chatname: string | null | undefined = "";
           let userstatus: string | null | undefined = "";
           if (e.isgroup) {
@@ -258,7 +258,7 @@ const Home: React.FC = () => {
           else {
             return (null);
           }
-        })}
+        }) : <h1>You haven't chatted with any one yet</h1>}
         <IonFab horizontal='end' vertical='bottom' slot='fixed'>
           <IonFabButton color='primary' onClick={startCreatingHandler}>
             <IonIcon icon={chatboxEllipsesOutline} />
