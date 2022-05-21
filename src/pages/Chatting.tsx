@@ -14,22 +14,31 @@ import {
   IonTextarea,
   IonTitle,
   IonToolbar,
-  IonToast,
+  IonActionSheet,
   IonCard,
   IonCardContent,
   IonLabel,
   useIonViewDidEnter,
   IonSearchbar,
+  IonToast,
 } from "@ionic/react";
 import {
   addOutline,
   callOutline,
+  cameraSharp,
+  caretForwardCircle,
+  close,
+  heart,
+  locationSharp,
   searchOutline,
   send,
+  share,
+  trash,
 } from "ionicons/icons";
 import { SetStateAction } from "react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import { Geolocation, Position } from '@capacitor/geolocation';
 
 import "./Home.css";
 import "./Chatting.css";
@@ -41,15 +50,32 @@ const Chatting = () => {
   const [chatInfos, setChatInfos] = useState<Wchat | null>();
   const [chatboxtext, setChatboxtext] = useState<string>("");
   const [chatMessages, setChatMessages] = useState<Wchatmessage[]>();
+  const [showActionSheet, setShowActionSheet] = useState(false);
 
   const [isSearch, setIsSearch] = useState(false);
   const [searchText, setSearchText] = useState('');
+  const [toastMessage, setToastMessage] = useState('');
 
   const sendMessage = () => {
     addDoc(collection(db, "chats", chatInfos!.chatuid, 'message'), {
       timestamp: serverTimestamp(),
       text: chatboxtext,
       img: null,
+      location:null,
+      userUID: auth.currentUser?.uid
+    })
+    setChatboxtext("")
+    // console.log("Document written with ID: ", docRef.id);
+  };
+  const sendLocationMessage = (locationdata:Position) => {
+    addDoc(collection(db, "chats", chatInfos!.chatuid, 'message'), {
+      timestamp: serverTimestamp(),
+      text: chatboxtext,
+      img: null,
+      location:{
+        lat:locationdata.coords.latitude,
+        long:locationdata.coords.longitude
+      },
       userUID: auth.currentUser?.uid
     })
     setChatboxtext("")
@@ -90,7 +116,7 @@ const Chatting = () => {
     element.scrollToBottom(500)
   }
 
-  const stringToColour = (str:string) => {
+  const stringToColour = (str: string) => {
     var hash = 0;
     for (var i = 0; i < str.length; i++) {
       hash = str.charCodeAt(i) + ((hash << 5) - hash);
@@ -102,7 +128,13 @@ const Chatting = () => {
     }
     return colour;
   }
-
+  const getCurrentPosition = async () => {
+    
+    const coordinates = await Geolocation.getCurrentPosition();
+    
+      console.log('Current position:', coordinates);
+      return coordinates;
+  };
 
   return (
     <IonPage>
@@ -151,12 +183,15 @@ const Chatting = () => {
         {chatMessages?.map((e) => {
           const time = e.timestamp ? e.timestamp.toDate().toLocaleTimeString() : "";
           const date = e.timestamp ? e.timestamp.toDate().toDateString() : "";
+          const locationstr = !!e.location?.lat ? encodeURIComponent(e.location.lat+","+e.location.long) : null
           if (e.text?.toLowerCase().includes(searchText.toLowerCase())) {
             if (auth.currentUser?.uid == e.userUID) {
               return (
                 <div key={e.uid} >
                   <IonCard color="primary" className="chat-bubble-sent">
                     <IonCardContent >
+                      {!!locationstr? <IonButton href="#" onClick={()=>{window.open(`https://www.google.com/maps/search/?api=1&query=${locationstr}`, '_system', 'location=yes'); return false;}} size='small'><IonIcon slot="icon-only" icon={locationSharp} /> View Location</IonButton> : ""}
+                    
                       <h2>
                         <strong>{e.text}</strong>
                       </h2>
@@ -171,7 +206,7 @@ const Chatting = () => {
                   <IonLabel className="chat-bubble-received">
                     <p className="chat-time">
                       {/* note: json stringify is to make the string more random but still the same everytime */}
-                      <strong style={{color: stringToColour(e.userUID?JSON.stringify(e.userUID) : "grey")}}>{chatInfos?.users?.find(a => a.uid === e.userUID)?.name}</strong>
+                      <strong style={{ color: stringToColour(e.userUID ? JSON.stringify(e.userUID) : "grey") }}>{chatInfos?.users?.find(a => a.uid === e.userUID)?.name}</strong>
                       <br />
                     </p>
                   </IonLabel>
@@ -193,12 +228,48 @@ const Chatting = () => {
             return (null)
           }
         })}
+
+        <IonActionSheet
+          isOpen={showActionSheet}
+          onDidDismiss={() => setShowActionSheet(false)}
+          buttons={[{
+            text: 'Share Current Location',
+            icon: locationSharp,
+            handler: () => {
+              // console.log('loc clicked');
+              getCurrentPosition().then((e)=>{
+                if(!!e.coords.latitude){
+                  sendLocationMessage(e)
+                }else{
+                  setToastMessage('Unable to get location data');
+                }
+              })
+              .catch((e)=>{setToastMessage(e['message'])})
+            }
+          }, {
+            text: 'Send Image',
+            icon: cameraSharp,
+            handler: () => {
+              console.log('cam clicked');
+            }
+          }, {
+            text: 'Cancel',
+            icon: close,
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancel clicked');
+            }
+          }]}
+        >
+        </IonActionSheet>
+
+
       </IonContent>
 
       <IonFooter className="chat-footer" id="chat-footer">
         <IonGrid>
           <IonRow className="ion-align-items-center">
-            <IonCol size="1">
+            <IonCol size="1" onClick={() => setShowActionSheet(true)}>
               <IonIcon icon={addOutline} color="primary" />
             </IonCol>
 
@@ -212,6 +283,10 @@ const Chatting = () => {
           </IonRow>
         </IonGrid>
       </IonFooter>
+      <IonToast isOpen={!!toastMessage}
+          message={toastMessage}
+          duration={3000}
+          onDidDismiss={() => { setToastMessage('') }} />
     </IonPage>
   );
 };

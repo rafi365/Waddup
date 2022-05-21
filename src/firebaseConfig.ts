@@ -205,6 +205,7 @@ export type Wchatmessage = {
   uid: string | null,
   img: string | null,
   text: string | null,
+  location: {lat:number,long:number}|null,
   userUID: string | null,
   timestamp: Timestamp
 }
@@ -214,6 +215,7 @@ export const chatmessagetoWchatmessage = (chatmessage: QueryDocumentSnapshot) =>
     uid: chatmessage.id,
     img: chatmessage.data()['img'],
     text: chatmessage.data()['text'],
+    location: chatmessage.data()['location'],
     userUID: chatmessage.data()['userUID'],
     timestamp: chatmessage.data()['timestamp']
   }
