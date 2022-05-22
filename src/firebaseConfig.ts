@@ -2,6 +2,9 @@ import { initializeApp } from "firebase/app";
 import { addDoc, arrayRemove, arrayUnion, collection, doc, documentId, getDoc, getDocs, getFirestore, query, QueryDocumentSnapshot, serverTimestamp, setDoc, Timestamp, updateDoc, where } from "firebase/firestore";
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useHistory } from "react-router";
+
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { url } from "inspector";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -21,6 +24,7 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 // Initialize Cloud Firestore and get a reference to the service
 export const db = getFirestore(app);
+export const storagedb = getStorage(app);
 
 export const checkFriendIDdupe = async (textid: string) => {
   const querysearch = query(collection(db, "users"), where("friendID", "==", textid));
@@ -275,9 +279,30 @@ export const getchatdata = async (chatid: string) => {
 }
 
 export const editProfile = async (name:string,status:string) => {
+  let avatarurl = null;
+  try {
+    avatarurl = await getDownloadURL(ref(storagedb,"users/"+auth.currentUser!.uid))
+  } catch (error) {
+    console.log("data not found ",avatarurl);
+  }
   await updateDoc(doc(db, "users", auth.currentUser!.uid), {
       name: name,
-      avatarurl: null,
+      avatarurl: avatarurl,
       status:status
   });
+}
+
+export const dataUrlToFile = async (dataUrl: string, fileName: string): Promise<File> => {
+  const res: Response = await fetch(dataUrl);
+  const blob: Blob = await res.blob();
+  return new File([blob], fileName, { type: 'image/png' });
+}
+
+export const uploadPhotoHandler = async (dbpath: string,filename:string,base64imagedata:string) => {
+  const selectedFile = await dataUrlToFile(base64imagedata, filename);
+  const filefullpath = dbpath+filename;
+  const storageRef = ref(storagedb, filefullpath);
+  await uploadBytes(storageRef, selectedFile as Blob)
+  const downloadurl = await getDownloadURL(ref(storagedb, filefullpath))
+  return downloadurl;
 }

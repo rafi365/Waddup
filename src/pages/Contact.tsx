@@ -195,7 +195,7 @@ const Contact: React.FC = () => {
                 <IonItem color="secondary" lines="full" onClick={() => createDM(e.uid)}>
                   <IonThumbnail slot="start" className="ion-margin">
                     <IonAvatar>
-                      <img src="https://media.discordapp.net/attachments/765461987718332416/962249598267687012/unknown.png" />
+                      <img src={!!e.avatarurl ? e.avatarurl : "https://media.discordapp.net/attachments/765461987718332416/962249598267687012/unknown.png"} />
                     </IonAvatar>
                   </IonThumbnail>
                   <IonLabel color="light" className="ion-margin">

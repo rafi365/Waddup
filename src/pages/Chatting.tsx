@@ -68,7 +68,7 @@ const Chatting = () => {
   const [toastMessage, setToastMessage] = useState('');
 
   const sendMessage = () => {
-    if(!!chatboxtext){
+    if (!!chatboxtext) {
       addDoc(collection(db, "chats", chatInfos!.chatuid, 'message'), {
         timestamp: serverTimestamp(),
         text: chatboxtext,
@@ -204,7 +204,7 @@ const Chatting = () => {
                           {/* <input type='checkbox' slot='start' {...register(e.uid!.toString(), {})} id={e.uid!.toString()} /> */}
                           <IonThumbnail slot="start" className='ion-margin' >
                             <IonAvatar>
-                              <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
+                              <img src={!!e.avatarurl ? e.avatarurl : 'https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338'} />
                             </IonAvatar>
                           </IonThumbnail>
                           <IonLabel color='light' className='ion-margin'>

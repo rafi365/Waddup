@@ -25,6 +25,7 @@ import { signOut } from "firebase/auth";
 import { logOutOutline } from "ionicons/icons";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import CameraUploader from "../components/CameraUploader";
 import { auth, editProfile, getSingleUser, Wuserdata } from "../firebaseConfig";
 import "./Home.css";
 
@@ -98,6 +99,7 @@ const Profile: React.FC = () => {
           <IonTitle className="ion-text-center ion-padding">Edit Profile</IonTitle>
         </IonHeader>
         <IonContent>
+          <CameraUploader />
           <IonList className="ion-text-center">
             <IonItem>
               <IonLabel>Name:</IonLabel>
@@ -124,8 +126,9 @@ const Profile: React.FC = () => {
       <IonContent fullscreen color="medium">
         <div className="container">
           <IonCard className="ion-padding" style={{ borderRadius: "10px" }}>
+
             <img
-              src="https://media.discordapp.net/attachments/926433926027808770/965095961418428476/IMG_20220410_233007.jpg?width=476&height=480"
+              src={!!userInfo?.avatarurl ? userInfo.avatarurl : "https://media.discordapp.net/attachments/926433926027808770/965095961418428476/IMG_20220410_233007.jpg?width=476&height=480"}
               alt="#"
             />
             {/* <h1 className="ion-margin-top">Om Burhan</h1> */}

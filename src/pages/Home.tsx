@@ -174,7 +174,7 @@ const Home: React.FC = () => {
                           <input type='checkbox' slot='start' {...register(e.uid!.toString(), {})} id={e.uid!.toString()} />
                           <IonThumbnail slot="start" className='ion-margin' >
                             <IonAvatar>
-                              <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
+                              <img src={!!e.avatarurl ? e.avatarurl : 'https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg'} />
                             </IonAvatar>
                           </IonThumbnail>
                           <IonLabel color='light' className='ion-margin'>
@@ -229,22 +229,25 @@ const Home: React.FC = () => {
 
       </IonHeader>
       <IonContent fullscreen>
-        {chats?.length? chats?.map((e) => {
+        {chats?.length ? chats?.map((e) => {
           let chatname: string | null | undefined = "";
           let userstatus: string | null | undefined = "";
+          let chatpic: string | null | undefined = "";
           if (e.isgroup) {
             chatname = e.chatname
+            chatpic = e.img
           } else {
             const t = e.users?.find(e => e !== auth.currentUser?.uid)
             chatname = userList?.find(e => e.uid === t)?.name
             userstatus = userList?.find(e => e.uid === t)?.status
+            chatpic = userList?.find(e => e.uid === t)?.avatarurl
           }
           if (chatname?.toLowerCase().includes(searchText.toLowerCase())) {
             return (
               <IonItem key={e.chatuid} color='secondary' lines="full" button routerLink={`/chat/${e.chatuid}`}>
                 <IonThumbnail slot="start" className='ion-margin'>
                   <IonAvatar>
-                    <img src='https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338' />
+                    <img src={!!chatpic ? chatpic : 'https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg'} />
                   </IonAvatar>
                 </IonThumbnail>
                 <IonLabel color='light' className='ion-margin'>
