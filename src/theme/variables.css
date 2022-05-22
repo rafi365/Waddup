@@ -231,11 +231,14 @@ body.dark {
 }
 
 /* Font Style*/
-@font-face {
+/* @font-face {
   font-family: 'Satisfy', cursive;
   src: url("../assets/fonts/Satisfy-Regular.ttf")
-}
+} */
 
-*{
+/* *{
   font-family: 'Satisfy', cursive;
-}
+} */
+/* *{
+  font-family: cursive;
+} */
