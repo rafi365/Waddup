@@ -50,14 +50,17 @@ import { Geolocation, Position } from '@capacitor/geolocation';
 
 import "./Home.css";
 import "./Chatting.css";
-import { auth, chatmessagetoWchatmessage, db, getchatdata, Wchat, Wchatmessage } from "../firebaseConfig";
-import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from "firebase/firestore";
+import { auth, chatmessagetoWchatmessage, db, getchatdata, storagedb, Wchat, Wchatmessage } from "../firebaseConfig";
+import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { useForm } from "react-hook-form";
 import CameraUploader from "../components/CameraUploader";
+import { ref, deleteObject } from "firebase/storage";
 
 const Chatting = () => {
   //  Local state
   const [isGroupSettingOpened, setIsGroupSettingOpened] = useState(false);
+  const [isCameraBoxOpened, setIsCameraBoxOpened] = useState(false);
+  const [CamerachatID, setCamerachatID] = useState<string | null>(null);
   const { register, handleSubmit } = useForm();
   const [chatInfos, setChatInfos] = useState<Wchat | null>();
   const [chatboxtext, setChatboxtext] = useState<string>("");
@@ -180,8 +183,61 @@ const Chatting = () => {
 
   }
 
+  const prepareCam = () => {
+    const newCameramsgID = doc(collection(db, "chats", chatInfos!.chatuid, 'message'));
+    setCamerachatID(newCameramsgID.id);
+    console.log("camera chat id is : ", newCameramsgID.id)
+    setIsCameraBoxOpened(true)
+  }
+  const uploadImageChat = async (url: string | null) => {
+    if (!!CamerachatID) {
+      await setDoc(doc(db, "chats", chatInfos!.chatuid, 'message', CamerachatID), {
+        timestamp: serverTimestamp(),
+        text: chatboxtext,
+        img: url,
+        location: null,
+        userUID: auth.currentUser?.uid
+      })
+      setChatboxtext("")
+      setIsCameraBoxOpened(false);
+    }
+  }
+
+  const cancelImageUpload = () => {
+    // if (!!CamerachatID && !!chatInfos?.chatuid) {
+    //   const deleteRef = ref(storagedb, 'chats/' + chatInfos?.chatuid + '/' + CamerachatID);
+
+    //   // Delete the file
+    //   deleteObject(deleteRef).then(() => {
+    //     // File deleted successfully
+    //   }).catch((error) => {
+    //     // Uh-oh, an error occurred!
+    //     // console.log("delete failed ",error)
+    //   });
+    // }
+    setCamerachatID(null);
+    setIsCameraBoxOpened(false);
+  }
+
+
   return (
     <IonPage>
+      <IonModal isOpen={isCameraBoxOpened} backdropDismiss={false}>
+        <IonHeader>
+          <IonToolbar color='primary'>
+            <IonTitle>Upload Image</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent fullscreen>
+          {!!CamerachatID && !!chatInfos?.chatuid ? <CameraUploader onlypathtofile={'chats/' + chatInfos.chatuid + '/'} filename={CamerachatID} functioncallbackresult={uploadImageChat} /> : ""}
+          <IonRow className='ion-text-center'>
+            <IonCol>
+              <IonButton color='secondary' onClick={() => cancelImageUpload()}>Cancel</IonButton>
+            </IonCol>
+          </IonRow>
+        </IonContent>
+
+      </IonModal>
 
       <IonModal isOpen={isGroupSettingOpened} backdropDismiss={false}>
         <IonHeader>
@@ -239,6 +295,8 @@ const Chatting = () => {
 
         </IonContent>
       </IonModal>
+
+
       <IonHeader>
         <IonToolbar color="primary">
           {isSearch ?
@@ -295,7 +353,8 @@ const Chatting = () => {
                 <div key={e.uid} >
                   <IonCard color="primary" className="chat-bubble-sent">
                     <IonCardContent >
-                      {!!locationstr ? <IonButton href="#" onClick={() => { window.open(`https://www.google.com/maps/search/?api=1&query=${locationstr}`, '_system', 'location=yes'); return false; }} size='small'><IonIcon slot="icon-only" icon={locationSharp} /> View Location</IonButton> : ""}
+                      {!!e.img ? <img src={e.img} alt="Preview" /> : ""}
+                      {!!locationstr ? <IonButton onClick={() => { window.open(`https://www.google.com/maps/search/?api=1&query=${locationstr}`, '_system', 'location=yes'); return false; }} size='small'><IonIcon slot="icon-only" icon={locationSharp} /> View Location</IonButton> : ""}
 
                       <h2>
                         <strong>{e.text}</strong>
@@ -318,6 +377,8 @@ const Chatting = () => {
                   {/* </IonItem> */}
                   <IonCard className="chat-bubble-received">
                     <IonCardContent>
+                      {!!e.img ? <img src={e.img} alt="Preview" /> : ""}
+                      {!!locationstr ? <IonButton onClick={() => { window.open(`https://www.google.com/maps/search/?api=1&query=${locationstr}`, '_system', 'location=yes'); return false; }} size='small'><IonIcon slot="icon-only" icon={locationSharp} /> View Location</IonButton> : ""}
                       <h2>
                         <strong>{e.text}</strong>
                       </h2>
@@ -355,7 +416,7 @@ const Chatting = () => {
             text: 'Send Image',
             icon: cameraSharp,
             handler: () => {
-              console.log('cam clicked');
+              prepareCam();
             }
           }, {
             text: 'Cancel',
