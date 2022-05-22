@@ -68,13 +68,15 @@ const Chatting = () => {
   const [toastMessage, setToastMessage] = useState('');
 
   const sendMessage = () => {
-    addDoc(collection(db, "chats", chatInfos!.chatuid, 'message'), {
-      timestamp: serverTimestamp(),
-      text: chatboxtext,
-      img: null,
-      location: null,
-      userUID: auth.currentUser?.uid
-    })
+    if(!!chatboxtext){
+      addDoc(collection(db, "chats", chatInfos!.chatuid, 'message'), {
+        timestamp: serverTimestamp(),
+        text: chatboxtext,
+        img: null,
+        location: null,
+        userUID: auth.currentUser?.uid
+      })
+    }
     setChatboxtext("")
     // console.log("Document written with ID: ", docRef.id);
   };
