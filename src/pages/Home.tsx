@@ -101,29 +101,15 @@ const Home: React.FC = () => {
   const { register, handleSubmit } = useForm();
   const history = useHistory()
   const createGroup = async (targetUserUID: string[], chatname: string) => {
-    const querysearch = query(collection(db, "chats"), where("isgroup", "==", false), where('users', '==', [auth.currentUser!.uid].concat(targetUserUID)));
-    const querySnapshot = await getDocs(querysearch);
-    let islooping = false;
-    let docid = null;
-    querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
-      docid = doc.id;
-      islooping = true;
-    });
-    if (islooping) {
-      history.replace('/chat/' + docid);
-    } else {
       const docRef = await addDoc(collection(db, "chats"), {
         chatname: chatname,
         users: [auth.currentUser!.uid].concat(targetUserUID),
         img: null,
         isgroup: true
       });
-      docid = docRef.id;
+      const docid = docRef.id;
       history.replace('/chat/' + docid);
       console.log("Document written with ID: ", docRef.id);
-    }
   }
   const makeGroupHandler = (data: any) => {
     setIsCreating(false);
