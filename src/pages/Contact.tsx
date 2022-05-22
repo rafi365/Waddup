@@ -111,17 +111,20 @@ const Contact: React.FC = () => {
   const history = useHistory()
   const createDM = async (targetUserUID: string) => {
     const querysearch = query(collection(db, "chats"), where("isgroup", "==", false), where('users', '==', [auth.currentUser!.uid, targetUserUID]));
+    const querysearch_reversed = query(collection(db, "chats"), where("isgroup", "==", false), where('users', '==', [targetUserUID, auth.currentUser!.uid]));
     const querySnapshot = await getDocs(querysearch);
-    let islooping = false;
-    let docid = null;
+    const querySnapshot_reversed = await getDocs(querysearch_reversed);
+    //queries the database both ways as a workaround to firebase not supporting AND operation in array type field
+    let resultids: string[] = []; //concat both results then picks the first one if array not empty
     querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
-      docid = doc.id;
-      islooping = true;
+      resultids.push(doc.id);
     });
-    if (islooping) {
-      history.replace('/chat/' + docid);
+    querySnapshot_reversed.forEach((doc) => {
+      resultids.push(doc.id);
+    });
+    console.log("created DM", resultids);
+    if (!!resultids.length) {
+      history.replace('/chat/' + resultids[0]);
     } else {
       const docRef = await addDoc(collection(db, "chats"), {
         chatname: null,
@@ -129,7 +132,7 @@ const Contact: React.FC = () => {
         img: null,
         isgroup: false
       });
-      docid = docRef.id;
+      const docid = docRef.id;
       history.replace('/chat/' + docid);
       console.log("Document written with ID: ", docRef.id);
     }
