@@ -27,7 +27,7 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { query, collection, where, getDocs, documentId, addDoc } from "firebase/firestore";
-import { personAddOutline, searchOutline, trashBin } from "ionicons/icons";
+import { chevronBackOutline, personAddOutline, searchOutline, trashBin } from "ionicons/icons";
 import { useEffect, useRef, useState } from "react";
 import { useHistory } from "react-router";
 import { addContact, auth, db, deleteContact, getContactIDs, usertoWuser, Wuserdata } from "../firebaseConfig";
@@ -97,9 +97,9 @@ const Contact: React.FC = () => {
           }).catch((e) => {
             console.log(e);
           })
-          
+
         }
-      }else{
+      } else {
         setContactList(undefined);
       }
     })
@@ -107,10 +107,10 @@ const Contact: React.FC = () => {
   useEffect(() => {
     refreshcontact();
   }, []);
-  
+
   const history = useHistory()
-  const createDM = async (targetUserUID:string) =>{
-    const querysearch = query(collection(db, "chats"), where("isgroup", "==", false),where('users', '==', [auth.currentUser!.uid,targetUserUID]));
+  const createDM = async (targetUserUID: string) => {
+    const querysearch = query(collection(db, "chats"), where("isgroup", "==", false), where('users', '==', [auth.currentUser!.uid, targetUserUID]));
     const querySnapshot = await getDocs(querysearch);
     let islooping = false;
     let docid = null;
@@ -120,17 +120,17 @@ const Contact: React.FC = () => {
       docid = doc.id;
       islooping = true;
     });
-    if(islooping){
-      history.replace('/chat/'+docid);
-    }else{
+    if (islooping) {
+      history.replace('/chat/' + docid);
+    } else {
       const docRef = await addDoc(collection(db, "chats"), {
-        chatname:null,
-        users:[auth.currentUser!.uid,targetUserUID],
-        img:null,
-        isgroup:false
+        chatname: null,
+        users: [auth.currentUser!.uid, targetUserUID],
+        img: null,
+        isgroup: false
       });
       docid = docRef.id;
-      history.replace('/chat/'+docid);
+      history.replace('/chat/' + docid);
       console.log("Document written with ID: ", docRef.id);
     }
   }
@@ -192,7 +192,7 @@ const Contact: React.FC = () => {
           {!!contactList ? contactList?.map((e) => {
             return (
               <IonItemSliding ref={slidingContactRef} key={e.uid}>
-                <IonItem color="secondary" lines="full" onClick={()=>createDM(e.uid)}>
+                <IonItem color="secondary" lines="full" onClick={() => createDM(e.uid)}>
                   <IonThumbnail slot="start" className="ion-margin">
                     <IonAvatar>
                       <img src="https://media.discordapp.net/attachments/765461987718332416/962249598267687012/unknown.png" />
@@ -205,6 +205,7 @@ const Contact: React.FC = () => {
                     <br />
                     <p>{e.status}</p>
                   </IonLabel>
+                  <IonIcon slot="end" icon={chevronBackOutline} />
                 </IonItem>
                 <IonItemOptions side="end">
                   <IonItemOption color="danger" onClick={() => { startDeleteContactHandler(e.uid) }}>
