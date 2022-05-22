@@ -5,11 +5,13 @@ import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useHistory } from 'react-router-dom';
 import { addUser, auth, checkFriendIDdupe, db } from '../firebaseConfig';
+import CameraUploader from './CameraUploader';
 // import '../pages/Home.css';
 
 const NewUserConfig: React.FC = () => {
   const { register, handleSubmit } = useForm();
   const [toastMessage, setToastMessage] = useState('');
+  const [avatarURL, setAvatarURL] = useState<string | null>(null);
   const history = useHistory();
 
   const registerUser = async (data: any) => {
@@ -20,7 +22,7 @@ const NewUserConfig: React.FC = () => {
         if (isdupe) {
           setToastMessage('friendID has already been taken!')
         } else {
-          addUser(data['name'], data['friendID']);
+          addUser(data['name'], data['friendID'], avatarURL);
         }
       }
 
@@ -43,8 +45,9 @@ const NewUserConfig: React.FC = () => {
 
   return (
     <IonGrid style={linkStyle}>
-      <IonRow >
-        <IonCol  >
+      {!!auth.currentUser?.uid ? <CameraUploader onlypathtofile="users/" filename={auth.currentUser.uid} functioncallbackresult={(e) => setAvatarURL(e)} /> : ""}
+      <IonRow>
+        <IonCol>
           <form onSubmit={handleSubmit(registerUser)} >
             <label>Name : </label>
             <IonInput type="text" {...register("name")} style={linkStylebox} />

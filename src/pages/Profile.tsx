@@ -91,15 +91,15 @@ const Profile: React.FC = () => {
     modalHandler()
   }
 
+
   return (
     <IonPage>
-
       <IonModal isOpen={modalProfile} backdropDismiss={false}>
         <IonHeader>
           <IonTitle className="ion-text-center ion-padding">Edit Profile</IonTitle>
         </IonHeader>
         <IonContent>
-          <CameraUploader />
+          {!!auth.currentUser?.uid ? <CameraUploader onlypathtofile="users/" filename={auth.currentUser.uid} functioncallbackresult={saveProfile} /> : ""}
           <IonList className="ion-text-center">
             <IonItem>
               <IonLabel>Name:</IonLabel>

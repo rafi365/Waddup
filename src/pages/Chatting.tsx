@@ -53,6 +53,7 @@ import "./Chatting.css";
 import { auth, chatmessagetoWchatmessage, db, getchatdata, Wchat, Wchatmessage } from "../firebaseConfig";
 import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc } from "firebase/firestore";
 import { useForm } from "react-hook-form";
+import CameraUploader from "../components/CameraUploader";
 
 const Chatting = () => {
   //  Local state
@@ -149,15 +150,22 @@ const Chatting = () => {
     return coordinates;
   };
 
-  const ChangeGroupSettings = async (groupName: string) => {
+  const ChangeGroupSettingsName = async (groupName: string) => {
     await updateDoc(doc(db, "chats", chatInfos!.chatuid), {
       chatname: groupName
     });
   }
+  const ChangeGroupSettingsPic = async (groupPicURL: string | null) => {
+    if (!!groupPicURL) {
+      await updateDoc(doc(db, "chats", chatInfos!.chatuid), {
+        img: groupPicURL
+      });
+    }
+  }
 
   const ChangeGroupSettingsHandler = (data: any) => {
     setIsGroupSettingOpened(false);
-    ChangeGroupSettings(data['gname']);
+    ChangeGroupSettingsName(data['gname']);
     // const result = contactList?.flatMap((e) =>
     //   (!!data[e.uid]) ? [e.uid] : []
     // )
@@ -182,6 +190,7 @@ const Chatting = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
+          {!!chatInfos?.chatuid ? <CameraUploader onlypathtofile={'chats/' + chatInfos.chatuid + '/'} filename={"groupimg"} functioncallbackresult={ChangeGroupSettingsPic} /> : ""}
           <form onSubmit={handleSubmit(ChangeGroupSettingsHandler)}>
             <IonLabel>Group Name</IonLabel>
             <IonInput required placeholder='Insert Group Name' {...register("gname")} />

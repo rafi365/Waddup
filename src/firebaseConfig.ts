@@ -40,14 +40,14 @@ export const checkFriendIDdupe = async (textid: string) => {
 }
 
 
-export async function addUser(name: string, friendID: string,) {
+export async function addUser(name: string, friendID: string, avatarURL: string | null) {
   try {
     const docRef = await setDoc(doc(db, "users", auth.currentUser!.uid), {
       timestamp: serverTimestamp(),
       name: name,
       friendID: friendID,
-      avatarurl: null,
-      status:"I'm new to Waddup!"
+      avatarurl: avatarURL,
+      status: "I'm new to Waddup!"
     });
 
     console.log("Document written with ID: ", docRef);
@@ -98,8 +98,8 @@ export async function deleteContact(friendID: string) {
   }
 }
 
-export const getSingleUser = async (userid: string|undefined) => {
-  if(!userid){
+export const getSingleUser = async (userid: string | undefined) => {
+  if (!userid) {
     return null;
   }
   const docSnap = await getDoc(doc(db, "users", userid));
@@ -186,8 +186,8 @@ export type Wuserdata = {
   contacts: string[] | null,
   friendID: string | null,
   name: string | null,
-  timestamp: number|null,
-  status:string|null
+  timestamp: number | null,
+  status: string | null
 }
 
 export type Wchat = {
@@ -209,7 +209,7 @@ export type Wchatmessage = {
   uid: string | null,
   img: string | null,
   text: string | null,
-  location: {lat:number,long:number}|null,
+  location: { lat: number, long: number } | null,
   userUID: string | null,
   timestamp: Timestamp
 }
@@ -278,17 +278,17 @@ export const getchatdata = async (chatid: string) => {
   } return null;
 }
 
-export const editProfile = async (name:string,status:string) => {
+export const editProfile = async (name: string, status: string) => {
   let avatarurl = null;
   try {
-    avatarurl = await getDownloadURL(ref(storagedb,"users/"+auth.currentUser!.uid))
+    avatarurl = await getDownloadURL(ref(storagedb, "users/" + auth.currentUser!.uid))
   } catch (error) {
-    console.log("data not found ",avatarurl);
+    console.log("data not found ", avatarurl);
   }
   await updateDoc(doc(db, "users", auth.currentUser!.uid), {
-      name: name,
-      avatarurl: avatarurl,
-      status:status
+    name: name,
+    avatarurl: avatarurl,
+    status: status
   });
 }
 
@@ -298,9 +298,9 @@ export const dataUrlToFile = async (dataUrl: string, fileName: string): Promise<
   return new File([blob], fileName, { type: 'image/png' });
 }
 
-export const uploadPhotoHandler = async (dbpath: string,filename:string,base64imagedata:string) => {
+export const uploadPhotoHandler = async (dbpath: string, filename: string, base64imagedata: string) => {
   const selectedFile = await dataUrlToFile(base64imagedata, filename);
-  const filefullpath = dbpath+filename;
+  const filefullpath = dbpath + filename;
   const storageRef = ref(storagedb, filefullpath);
   await uploadBytes(storageRef, selectedFile as Blob)
   const downloadurl = await getDownloadURL(ref(storagedb, filefullpath))
