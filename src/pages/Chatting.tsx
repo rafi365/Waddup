@@ -435,8 +435,8 @@ const Chatting = () => {
       <IonFooter className="chat-footer" id="chat-footer">
         <IonGrid>
           <IonRow className="ion-align-items-center">
-            <IonCol size="1" onClick={() => setShowActionSheet(true)}>
-              <IonIcon icon={addOutline} color="primary" />
+            <IonCol size="1.4" onClick={() => setShowActionSheet(true)}>
+              <IonIcon icon={addOutline} color="medium" />
             </IonCol>
 
             <div className="chat-input-container">
