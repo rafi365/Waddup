@@ -74,7 +74,7 @@ const Home: React.FC = () => {
       setChats(temp);
 
     });
-    return () => { unsub; unsubscribe }; // unsubscribe on unmount
+    // return () => { unsub; unsubscribe }; // unsubscribe on unmount
   }, []);
 
   useEffect(() => {
@@ -214,7 +214,7 @@ const Home: React.FC = () => {
           </IonToolbar>}
 
       </IonHeader>
-      <IonContent fullscreen >
+      <IonContent fullscreen>
         {chats?.length ? chats?.map((e) => {
           let chatname: string | null | undefined = "";
           let userstatus: string | null | undefined = "";
@@ -236,7 +236,7 @@ const Home: React.FC = () => {
                     <img src={!!chatpic ? chatpic : 'https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg'} />
                   </IonAvatar>
                 </IonThumbnail>
-                <IonLabel  className='ion-margin'>
+                <IonLabel color='light' className='ion-margin'>
                   <IonText><strong>{chatname}</strong></IonText><br />
                   <p>{userstatus}</p>
                   {/* <p>12.00</p> */}

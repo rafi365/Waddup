@@ -71,7 +71,6 @@ export async function addContact(friendID: string) {
       const docRef = await updateDoc(doc(db, "users", auth.currentUser!.uid), {
         contacts: arrayUnion(islooping)
       });
-      docRef;
       return "Contacts Successfully added!";
     }
     return "FriendID Not Found!";
@@ -88,7 +87,6 @@ export async function deleteContact(friendID: string) {
     const docRef = await updateDoc(doc(db, "users", auth.currentUser!.uid), {
       contacts: arrayRemove(friendID)
     });
-    docRef;
     return "Contacts Successfully deleted!"
 
     // console.log("Document written with ID: ", docRef);
