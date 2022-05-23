@@ -45,7 +45,6 @@ import {
   helpCircleOutline,
   moon,
   personCircleOutline,
-  settingsOutline,
 } from "ionicons/icons";
 import Tabs from "./pages/Tabs";
 import Chatting from "./pages/Chatting";
@@ -53,6 +52,7 @@ import { useEffect, useState } from "react";
 import { auth } from "./firebaseConfig";
 import { User } from "firebase/auth";
 import { Storage } from '@capacitor/storage';
+
 
 setupIonicReact();
 
@@ -124,12 +124,8 @@ const App: React.FC = () => {
                 </IonItem>
                 <IonItem button routerLink="/tabs/faq">
                   <IonIcon slot="start" icon={helpCircleOutline} />
-                  <IonLabel>FAQ</IonLabel>
+                  <IonLabel >FAQ</IonLabel>
                 </IonItem>
-                {/* <IonItem>
-                  <IonIcon slot="start" icon={settingsOutline} />
-                  <IonLabel>Settings</IonLabel>
-                </IonItem> */}
                 <IonItem>
                   <IonIcon slot="start" icon={moon} />
                   <IonLabel>Dark Mode</IonLabel>

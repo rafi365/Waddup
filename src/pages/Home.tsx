@@ -236,7 +236,7 @@ const Home: React.FC = () => {
                     <img src={!!chatpic ? chatpic : 'https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg'} />
                   </IonAvatar>
                 </IonThumbnail>
-                <IonLabel color='light' className='ion-margin'>
+                <IonLabel  className='label-chat'>
                   <IonText><strong>{chatname}</strong></IonText><br />
                   <p>{userstatus}</p>
                   {/* <p>12.00</p> */}

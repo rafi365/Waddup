@@ -201,7 +201,7 @@ const Contact: React.FC = () => {
                       <img src={!!e.avatarurl ? e.avatarurl : "https://media.discordapp.net/attachments/765461987718332416/962249598267687012/unknown.png"} />
                     </IonAvatar>
                   </IonThumbnail>
-                  <IonLabel  className="ion-margin">
+                  <IonLabel  className="label-chat">
                     <IonText>
                       <strong>{e.name}</strong>
                     </IonText>

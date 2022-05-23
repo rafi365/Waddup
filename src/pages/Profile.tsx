@@ -123,7 +123,7 @@ const Profile: React.FC = () => {
           <IonTitle className="cus_font">Profile</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen color="medium">
+      <IonContent fullscreen color="secondary">
         <div className="container">
           <IonCard className="ion-padding" style={{ borderRadius: "10px" }}>
 

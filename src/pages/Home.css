@@ -22,7 +22,9 @@
     width: 350px;
     margin-top: 150px;
 }
-.app-title{ font-size: 50px; }
+.app-title{ 
+    font-family: 'Satisfy', cursive;
+    font-size: 50px; }
 
 .btn { margin-top: 30px; }
 
@@ -69,3 +71,6 @@
     
 }
 
+.label-chat {
+    margin-left: 2rem;
+}
