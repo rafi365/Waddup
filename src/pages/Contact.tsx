@@ -152,7 +152,7 @@ const Contact: React.FC = () => {
 
         <IonModal isOpen={isAdding}>
           <IonHeader>
-            <IonToolbar>
+            <IonToolbar color="primary">
               <IonTitle>Add Contact</IonTitle>
             </IonToolbar>
           </IonHeader>
