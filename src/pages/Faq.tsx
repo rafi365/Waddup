@@ -35,7 +35,7 @@ const Faq: React.FC = () => {
           </IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen color="medium">
+      <IonContent fullscreen color="secondary">
         <IonGrid>
           <IonRow>
             <IonCol>
@@ -52,20 +52,7 @@ const Faq: React.FC = () => {
                 </IonCardContent>
               </IonCard>
             </IonCol>
-            <IonCol>
-              <IonCard>
-                {/* <img
-                  src="https://media.discordapp.net/attachments/926433926027808770/965095961418428476/IMG_20220410_233007.jpg?width=476&height=480"
-                  alt="#"
-                /> */}
-                <IonCardHeader>
-                  <IonCardTitle>What is the purpose of Waddup?</IonCardTitle>
-                </IonCardHeader>
-                <IonCardContent>
-                  The main purpose of Waddup is to fulfill the final assignment of IF670 Class.
-                </IonCardContent>
-              </IonCard>
-            </IonCol>
+            
           </IonRow>
           <IonRow>
             <IonCard>

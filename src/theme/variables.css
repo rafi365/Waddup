@@ -77,28 +77,26 @@ http://ionicframework.com/docs/theming/ */
 }
 
 body.dark {
-  /** primary **/
-  --ion-color-primary: #3D4B6D;
-	--ion-color-primary-rgb: 61,75,109;
+  --ion-color-primary: #041C32;
+	--ion-color-primary-rgb: 4,28,50;
 	--ion-color-primary-contrast: #ffffff;
 	--ion-color-primary-contrast-rgb: 255,255,255;
-	--ion-color-primary-shade: #364260;
-	--ion-color-primary-tint: #505d7c;
+	--ion-color-primary-shade: #04192c;
+	--ion-color-primary-tint: #1d3347;
 
-  /** secondary **/
-  --ion-color-secondary: #4E6190;
-	--ion-color-secondary-rgb: 78,97,144;
+	--ion-color-secondary: #04293A;
+	--ion-color-secondary-rgb: 4,41,58;
 	--ion-color-secondary-contrast: #ffffff;
 	--ion-color-secondary-contrast-rgb: 255,255,255;
-	--ion-color-secondary-shade: #45557f;
-	--ion-color-secondary-tint: #60719b;
+	--ion-color-secondary-shade: #042433;
+	--ion-color-secondary-tint: #1d3e4e;
 
-  --ion-color-tertiary: #6a64ff;
-  --ion-color-tertiary-rgb: 106,100,255;
-  --ion-color-tertiary-contrast: #ffffff;
-  --ion-color-tertiary-contrast-rgb: 255,255,255;
-  --ion-color-tertiary-shade: #5d58e0;
-  --ion-color-tertiary-tint: #7974ff;
+	--ion-color-tertiary: #064663;
+	--ion-color-tertiary-rgb: 6,70,99;
+	--ion-color-tertiary-contrast: #ffffff;
+	--ion-color-tertiary-contrast-rgb: 255,255,255;
+	--ion-color-tertiary-shade: #053e57;
+	--ion-color-tertiary-tint: #1f5973;
 
   --ion-color-success: #2fdf75;
   --ion-color-success-rgb: 47,223,117;
@@ -128,12 +126,12 @@ body.dark {
   --ion-color-dark-shade: #d7d8da;
   --ion-color-dark-tint: #f5f6f9;
 
-  --ion-color-medium: #C4C4C4;
-	--ion-color-medium-rgb: 196,196,196;
-	--ion-color-medium-contrast: #000000;
-	--ion-color-medium-contrast-rgb: 0,0,0;
-	--ion-color-medium-shade: #acacac;
-	--ion-color-medium-tint: #cacaca;
+  --ion-color-medium: #424243;
+	--ion-color-medium-rgb: 66,66,67;
+	--ion-color-medium-contrast: #ffffff;
+	--ion-color-medium-contrast-rgb: 255,255,255;
+	--ion-color-medium-shade: #3a3a3b;
+	--ion-color-medium-tint: #555556;
 
   --ion-color-light: #222428;
   --ion-color-light-rgb: 34,36,40;

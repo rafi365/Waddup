@@ -307,12 +307,12 @@ const Chatting = () => {
               <IonButtons slot="start">
                 <IonBackButton defaultHref="/tabs/home" />
               </IonButtons>
-              <IonTitle>
+              
                 <div className="chat-contact-details">
                   <p>{chatInfos?.isgroup ? chatInfos?.chatname : chatInfos?.users?.find(e => e.uid !== auth.currentUser?.uid)?.name}</p>
                   {chatInfos?.isgroup ? "" : <IonText color="medium">{chatInfos?.users?.find(e => e.uid !== auth.currentUser?.uid)?.status}</IonText>}
                 </div>
-              </IonTitle>
+              
 
               <IonButtons slot="end">
                 <IonButton

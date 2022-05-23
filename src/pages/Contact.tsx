@@ -191,7 +191,7 @@ const Contact: React.FC = () => {
             </IonButtons>
           </IonToolbar>
         </IonHeader>
-        <IonContent fullscreen>
+        <IonContent fullscreen >
           {!!contactList ? contactList?.map((e) => {
             return (
               <IonItemSliding ref={slidingContactRef} key={e.uid}>
@@ -201,7 +201,7 @@ const Contact: React.FC = () => {
                       <img src={!!e.avatarurl ? e.avatarurl : "https://media.discordapp.net/attachments/765461987718332416/962249598267687012/unknown.png"} />
                     </IonAvatar>
                   </IonThumbnail>
-                  <IonLabel color="light" className="ion-margin">
+                  <IonLabel  className="ion-margin">
                     <IonText>
                       <strong>{e.name}</strong>
                     </IonText>
