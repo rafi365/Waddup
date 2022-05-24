@@ -43,7 +43,7 @@ const CameraUploader: React.FC<{ onlypathtofile: string, filename: string, funct
                         {!takenPhoto && <h3>No Photo</h3>}
                         {takenPhoto && <img src={takenPhoto} alt="Preview" />}
                     </div>
-                    <IonButton fill="clear" onClick={takePhotoHandler}>
+                    <IonButton color="secondary" onClick={takePhotoHandler}>
                         <IonIcon slot="start" icon={camera} />
                         <IonLabel>Upload Photo</IonLabel>
                     </IonButton>

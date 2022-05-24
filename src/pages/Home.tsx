@@ -158,7 +158,7 @@ const Home: React.FC = () => {
                       <label htmlFor={e.uid!.toString()}>
                         <IonItem color='secondary' lines="full">
                           <input type='checkbox' slot='start' {...register(e.uid!.toString(), {})} id={e.uid!.toString()} />
-                          <IonThumbnail slot="start" className='ion-margin' >
+                          <IonThumbnail slot="start" className='label-image' >
                             <IonAvatar>
                               <img src={!!e.avatarurl ? e.avatarurl : 'https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg'} />
                             </IonAvatar>

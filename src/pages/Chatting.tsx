@@ -248,7 +248,7 @@ const Chatting = () => {
         <IonContent fullscreen>
           {!!chatInfos?.chatuid ? <CameraUploader onlypathtofile={'chats/' + chatInfos.chatuid + '/'} filename={"groupimg"} functioncallbackresult={ChangeGroupSettingsPic} /> : ""}
           <form onSubmit={handleSubmit(ChangeGroupSettingsHandler)}>
-            <IonLabel>Group Name</IonLabel>
+            <IonLabel className="label-chat">Group Name</IonLabel>
             <IonInput required placeholder='Insert Group Name' {...register("gname")} />
             <IonButton
               type='submit'
@@ -272,7 +272,7 @@ const Chatting = () => {
                               <img src={!!e.avatarurl ? e.avatarurl : 'https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338'} />
                             </IonAvatar>
                           </IonThumbnail>
-                          <IonLabel color='light' className='ion-margin'>
+                          <IonLabel className='label-chat'>
                             <IonText><strong>{e.name}</strong></IonText><br />
                             <p>{e.status}</p>
                           </IonLabel>
