@@ -20,6 +20,7 @@ import {
   IonModal,
   IonPage,
   IonRow,
+  IonSearchbar,
   IonText,
   IonThumbnail,
   IonTitle,
@@ -37,6 +38,8 @@ const Contact: React.FC = () => {
   const slidingContactRef = useRef<HTMLIonItemSlidingElement>(null);
 
   const [isAdding, setIsAdding] = useState(false);
+  const [isSearch, setIsSearch] = useState(false);
+  const [searchText, setSearchText] = useState('');
   const [startDeleting, setStartDeleting] = useState<string | boolean>(false);
   const [toastMessage, setToastMessage] = useState('');
   const [contactList, setContactList] = useState<Wuserdata[]>();
@@ -179,44 +182,55 @@ const Contact: React.FC = () => {
         </IonModal>
 
         <IonHeader>
-          <IonToolbar color="primary">
-            <IonButtons slot="start">
-              <IonMenuButton />
-            </IonButtons>
-            <IonTitle className="cus_font">Waddup</IonTitle>
-            <IonButtons slot="end" className="ion-margin">
-              <IonButton slot="icon-only">
-                <IonIcon icon={searchOutline} />
-              </IonButton>
-            </IonButtons>
-          </IonToolbar>
+          {isSearch ?
+            <IonToolbar>
+              <IonSearchbar value={searchText} onIonChange={e => setSearchText(e.detail.value!)} inputmode="search" showCancelButton='always' onIonCancel={() => setIsSearch(false)}></IonSearchbar>
+            </IonToolbar>
+
+            :
+            <IonToolbar color="primary">
+              <IonButtons slot="start">
+                <IonMenuButton />
+              </IonButtons>
+              <IonTitle className="cus_font">Waddup</IonTitle>
+              <IonButtons slot="end" className="ion-margin">
+                <IonButton slot='icon-only' onClick={() => setIsSearch(true)}>
+                  <IonIcon icon={searchOutline} />
+                </IonButton>
+              </IonButtons>
+            </IonToolbar>}
         </IonHeader>
         <IonContent fullscreen >
           {!!contactList ? contactList?.map((e) => {
-            return (
-              <IonItemSliding ref={slidingContactRef} key={e.uid}>
-                <IonItem color="secondary" lines="full" onClick={() => createDM(e.uid)}>
-                  <IonThumbnail slot="start" className="ion-margin">
-                    <IonAvatar>
-                      <img src={!!e.avatarurl ? e.avatarurl : "https://media.discordapp.net/attachments/765461987718332416/962249598267687012/unknown.png"} />
-                    </IonAvatar>
-                  </IonThumbnail>
-                  <IonLabel  className="label-chat">
-                    <IonText>
-                      <strong>{e.name}</strong>
-                    </IonText>
-                    <br />
-                    <p>{e.status}</p>
-                  </IonLabel>
-                  <IonIcon slot="end" icon={chevronBackOutline} />
-                </IonItem>
-                <IonItemOptions side="end">
-                  <IonItemOption color="danger" onClick={() => { startDeleteContactHandler(e.uid) }}>
-                    <IonIcon slot="icon-only" icon={trashBin} />
-                  </IonItemOption>
-                </IonItemOptions>
-              </IonItemSliding>
-            )
+            if (e.name?.toLowerCase().includes(searchText.toLowerCase())) {
+              return (
+                <IonItemSliding ref={slidingContactRef} key={e.uid}>
+                  <IonItem color="secondary" lines="full" onClick={() => createDM(e.uid)}>
+                    <IonThumbnail slot="start" className="ion-margin">
+                      <IonAvatar>
+                        <img src={!!e.avatarurl ? e.avatarurl : "https://media.discordapp.net/attachments/765461987718332416/962249598267687012/unknown.png"} />
+                      </IonAvatar>
+                    </IonThumbnail>
+                    <IonLabel className="label-chat">
+                      <IonText>
+                        <strong>{e.name}</strong>
+                      </IonText>
+                      <br />
+                      <p>{e.status}</p>
+                    </IonLabel>
+                    <IonIcon slot="end" icon={chevronBackOutline} />
+                  </IonItem>
+                  <IonItemOptions side="end">
+                    <IonItemOption color="danger" onClick={() => { startDeleteContactHandler(e.uid) }}>
+                      <IonIcon slot="icon-only" icon={trashBin} />
+                    </IonItemOption>
+                  </IonItemOptions>
+                </IonItemSliding>
+              )
+            }
+            else {
+              return (null);
+            }
           }) : <h1 className="ion-padding">No Contacts yet</h1>}
           <IonFab horizontal="end" vertical="bottom" slot="fixed">
             <IonFabButton color="primary" onClick={startAddContactHandler}>
