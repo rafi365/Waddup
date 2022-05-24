@@ -17,7 +17,7 @@ const CameraUploader: React.FC<{ onlypathtofile: string, filename: string, funct
     const takePhotoHandler = async () => {
         const photo = await Camera.getPhoto({
             quality: 90,
-            allowEditing: true,
+            allowEditing: false,
             resultType: CameraResultType.Base64
         });
         console.log(photo);
