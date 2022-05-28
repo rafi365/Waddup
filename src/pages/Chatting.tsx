@@ -159,6 +159,14 @@ const Chatting = () => {
     await updateDoc(doc(db, "chats", chatInfos!.chatuid), {
       chatname: groupName
     });
+    const temp: Wchat = {
+      chatuid: chatInfos!.chatuid,
+      chatname: groupName,
+      users: chatInfos!.users,
+      img: chatInfos!.img,
+      isgroup: chatInfos!.isgroup
+    }
+    setChatInfos(temp)
   }
   const ChangeGroupSettingsPic = async (groupPicURL: string | null) => {
     if (!!groupPicURL) {
