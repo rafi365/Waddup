@@ -1,4 +1,5 @@
 import { FirebaseAuthentication } from "@capacitor-firebase/authentication";
+import { App } from "@capacitor/app";
 import {
   IonBackButton,
   IonButton,
@@ -20,6 +21,7 @@ import {
   IonTitle,
   IonToolbar,
   useIonViewWillEnter,
+  useIonViewWillLeave,
 } from "@ionic/react";
 import { signOut } from "firebase/auth";
 import { logOutOutline } from "ionicons/icons";
@@ -90,7 +92,16 @@ const Profile: React.FC = () => {
     })
     modalHandler()
   }
-
+  //backbutton management
+  App.addListener('backButton', data => {
+    console.log('Restored state profile :', data);
+    modalHandler();
+    // App.exitApp();
+  });
+  useIonViewWillLeave(()=>{
+    console.log("profile unmounted!");
+    App.removeAllListeners()
+  })
 
   return (
     <IonPage>

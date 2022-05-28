@@ -28,6 +28,7 @@ import {
   IonAvatar,
   IonItem,
   IonThumbnail,
+  useIonViewWillLeave,
 } from "@ionic/react";
 import {
   addOutline,
@@ -55,6 +56,7 @@ import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, s
 import { useForm } from "react-hook-form";
 import CameraUploader from "../components/CameraUploader";
 import { ref, deleteObject } from "firebase/storage";
+import { App } from "@capacitor/app";
 
 const Chatting = () => {
   //  Local state
@@ -218,7 +220,25 @@ const Chatting = () => {
     setCamerachatID(null);
     setIsCameraBoxOpened(false);
   }
-
+  //backbutton management
+  //cant use "useIonViewDidEnter" because jumping from tabs.tsx to app.tsx routing won't trigger viewenter and viewleave! 
+  App.addListener('backButton', data => {
+    console.log('mounting chat...')
+    console.log('Restored state chat :', data);
+    // App.exitApp();
+    if (isCameraBoxOpened) {
+      cancelImageUpload();
+    }
+    if (isGroupSettingOpened) {
+      setIsGroupSettingOpened(false);
+    }
+  });
+  // useIonViewDidEnter(()=>{
+  // })
+  useIonViewWillLeave(() => {
+    console.log("chat unmounted!");
+    App.removeAllListeners()
+  })
 
   return (
     <IonPage>
@@ -307,12 +327,12 @@ const Chatting = () => {
               <IonButtons slot="start">
                 <IonBackButton defaultHref="/tabs/home" />
               </IonButtons>
-              
-                <div className="chat-contact-details">
-                  <p>{chatInfos?.isgroup ? chatInfos?.chatname : chatInfos?.users?.find(e => e.uid !== auth.currentUser?.uid)?.name}</p>
-                  {chatInfos?.isgroup ? "" : <IonText color="medium">{chatInfos?.users?.find(e => e.uid !== auth.currentUser?.uid)?.status}</IonText>}
-                </div>
-              
+
+              <div className="chat-contact-details">
+                <p>{chatInfos?.isgroup ? chatInfos?.chatname : chatInfos?.users?.find(e => e.uid !== auth.currentUser?.uid)?.name}</p>
+                {chatInfos?.isgroup ? "" : <IonText color="medium">{chatInfos?.users?.find(e => e.uid !== auth.currentUser?.uid)?.status}</IonText>}
+              </div>
+
 
               <IonButtons slot="end">
                 <IonButton

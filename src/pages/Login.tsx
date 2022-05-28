@@ -1,4 +1,4 @@
-import { IonCol, IonContent, IonGrid, IonPage, IonRow, IonTitle, IonText, IonButton, IonInput, IonToast, useIonViewWillEnter, IonHeader, IonModal, IonToolbar, IonItemDivider, IonLabel, IonIcon } from '@ionic/react';
+import { IonCol, IonContent, IonGrid, IonPage, IonRow, IonTitle, IonText, IonButton, IonInput, IonToast, useIonViewWillEnter, IonHeader, IonModal, IonToolbar, IonItemDivider, IonLabel, IonIcon, useIonRouter, useIonViewWillLeave, useIonViewDidEnter } from '@ionic/react';
 import { useRef, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import './Home.css';
@@ -6,6 +6,7 @@ import { GoogleAuthProvider, onAuthStateChanged, sendPasswordResetEmail, signInW
 import { auth } from '../firebaseConfig';
 import { logoGoogle } from 'ionicons/icons';
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
+import { App } from '@capacitor/app';
 
 const Login: React.FC = () => {
   const history = useHistory();
@@ -75,7 +76,7 @@ const Login: React.FC = () => {
     // 2. Sign in on the web layer using the id token
     const credential = GoogleAuthProvider.credential(result.credential?.idToken);
     signInWithCredential(auth, credential)
-    .then(() => {
+      .then(() => {
         history.replace('/tabs/home');
       }).catch((error) => {
         console.log("Signin Failed!");
@@ -111,7 +112,22 @@ const Login: React.FC = () => {
     margin: "1rem",
     color: 'white'
   };
-
+  //backbutton management
+  useIonViewDidEnter(() => {
+    App.addListener('backButton', data => {
+      console.log('Restored state login:', data);
+      console.log('login reset ', isReset);
+      if (isReset) {
+        setIsReset(false)
+      } else {
+        App.exitApp();
+      }
+    });
+  })
+  useIonViewWillLeave(() => {
+    console.log("login unmounted!");
+    App.removeAllListeners()
+  })
   return (
     <IonPage>
       <IonContent color='primary'>

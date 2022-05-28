@@ -1,6 +1,6 @@
 import React from "react";
 
-import { IonIcon, IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, useIonViewWillEnter } from "@ionic/react";
+import { IonIcon, IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, useIonViewWillEnter, useIonViewWillLeave } from "@ionic/react";
 import { chatbubbleEllipses, peopleCircle } from "ionicons/icons";
 import { Redirect, Route, useHistory } from "react-router";
 import Home from "../pages/Home";
@@ -9,6 +9,7 @@ import Profile from "./Profile";
 import Chatting from "./Chatting";
 import { auth } from "../firebaseConfig";
 import Faq from "./Faq";
+import { App } from "@capacitor/app";
 
 const Tabs = () => {
     const history = useHistory();
@@ -19,6 +20,10 @@ const Tabs = () => {
             history.replace('/login');
         }
     });
+    useIonViewWillLeave(() => {
+        console.log("Tabs unmounted!");
+        App.removeAllListeners()
+    })
     return (
         <>
             <IonTabs>

@@ -1,4 +1,4 @@
-import { IonAvatar, IonBackButton, IonButton, IonButtons, IonCheckbox, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonListHeader, IonMenuButton, IonModal, IonPage, IonRow, IonSearchbar, IonText, IonThumbnail, IonTitle, IonToast, IonToolbar, useIonViewWillEnter, useIonViewWillLeave } from '@ionic/react';
+import { IonAvatar, IonBackButton, IonButton, IonButtons, IonCheckbox, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonListHeader, IonMenuButton, IonModal, IonPage, IonRow, IonSearchbar, IonText, IonThumbnail, IonTitle, IonToast, IonToolbar, useIonViewDidEnter, useIonViewWillEnter, useIonViewWillLeave } from '@ionic/react';
 import './Home.css';
 import { chatboxEllipsesOutline, searchOutline } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
@@ -7,6 +7,7 @@ import { auth, chattoWchat_lite, db, getContactIDs, getusers, usertoWuser, Wchat
 import { onSnapshot, doc, collection, query, where, documentId, getDocs, addDoc } from 'firebase/firestore';
 import NewUserConfig from '../components/NewUserConfig';
 import { useForm } from 'react-hook-form';
+import { App } from '@capacitor/app';
 
 const Home: React.FC = () => {
   const [isCreating, setIsCreating] = useState(false);
@@ -101,15 +102,15 @@ const Home: React.FC = () => {
   const { register, handleSubmit } = useForm();
   const history = useHistory()
   const createGroup = async (targetUserUID: string[], chatname: string) => {
-      const docRef = await addDoc(collection(db, "chats"), {
-        chatname: chatname,
-        users: [auth.currentUser!.uid].concat(targetUserUID),
-        img: null,
-        isgroup: true
-      });
-      const docid = docRef.id;
-      history.replace('/chat/' + docid);
-      console.log("Document written with ID: ", docRef.id);
+    const docRef = await addDoc(collection(db, "chats"), {
+      chatname: chatname,
+      users: [auth.currentUser!.uid].concat(targetUserUID),
+      img: null,
+      isgroup: true
+    });
+    const docid = docRef.id;
+    history.replace('/chat/' + docid);
+    console.log("Document written with ID: ", docRef.id);
   }
   const makeGroupHandler = (data: any) => {
     setIsCreating(false);
@@ -126,6 +127,24 @@ const Home: React.FC = () => {
     // console.log(data);
 
   }
+  //backbutton management
+  useIonViewDidEnter(() => {
+    console.log('component mounting....');
+    App.addListener('backButton', data => {
+      console.log('Restored state home :', data);
+      console.log('iscreating ',isCreating)
+      if (isCreating) {
+        setIsCreating(false);
+      } else {
+        console.log("home quit")
+        App.exitApp();
+      }
+    });
+  })
+  useIonViewWillLeave(() => {
+    console.log("home unmounted!");
+    App.removeAllListeners()
+  })
   return (
     <IonPage>
 
@@ -236,7 +255,7 @@ const Home: React.FC = () => {
                     <img src={!!chatpic ? chatpic : 'https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg'} />
                   </IonAvatar>
                 </IonThumbnail>
-                <IonLabel  className='label-chat'>
+                <IonLabel className='label-chat'>
                   <IonText><strong>{chatname}</strong></IonText><br />
                   <p>{userstatus}</p>
                   {/* <p>12.00</p> */}

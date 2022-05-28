@@ -1,3 +1,4 @@
+import { App } from "@capacitor/app";
 import {
   IonAlert,
   IonAvatar,
@@ -26,6 +27,8 @@ import {
   IonTitle,
   IonToast,
   IonToolbar,
+  useIonViewDidEnter,
+  useIonViewWillLeave,
 } from "@ionic/react";
 import { query, collection, where, getDocs, documentId, addDoc } from "firebase/firestore";
 import { chevronBackOutline, personAddOutline, searchOutline, trashBin } from "ionicons/icons";
@@ -140,7 +143,18 @@ const Contact: React.FC = () => {
       console.log("Document written with ID: ", docRef.id);
     }
   }
-
+  //backbutton management
+  useIonViewDidEnter(()=>{
+    App.addListener('backButton', data => {
+      console.log('Restored state contacts:', data);
+      // App.exitApp();
+      setIsAdding(false);
+    });
+  })
+  useIonViewWillLeave(() => {
+    console.log("contacts unmounted!");
+    App.removeAllListeners()
+  })
 
   return (
     <>
