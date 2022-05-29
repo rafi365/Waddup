@@ -1,24 +1,19 @@
-import { IonButton, IonCol, IonContent, IonGrid, IonInput, IonPage, IonRow, IonText, IonTitle, IonToast, useIonViewWillEnter } from '@ionic/react';
-import { createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
-import { query, collection, where, getDocs } from 'firebase/firestore';
-import { useRef, useState } from 'react';
+import { IonButton, IonCol, IonGrid, IonInput, IonRow, IonToast } from '@ionic/react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useHistory } from 'react-router-dom';
-import { addUser, auth, checkFriendIDdupe, db } from '../firebaseConfig';
+import { addUser, auth, checkFriendIDdupe } from '../firebaseConfig';
 import CameraUploader from './CameraUploader';
-// import '../pages/Home.css';
 
 const NewUserConfig: React.FC = () => {
   const { register, handleSubmit } = useForm();
   const [toastMessage, setToastMessage] = useState('');
   const [avatarURL, setAvatarURL] = useState<string | null>(null);
-  const history = useHistory();
 
   const registerUser = async (data: any) => {
-    console.log('creating a new user account with: ', data);
+    // console.log('creating a new user account with: ', data);
     if (!!data['name'] && !!data['friendID']) {
       checkFriendIDdupe(data['friendID']).then((isdupe) => {
-        console.log("checked ", isdupe);
+        // console.log("checked ", isdupe);
         if (isdupe) {
           setToastMessage('friendID has already been taken!')
         } else {

@@ -1,9 +1,9 @@
-import { IonAvatar, IonBackButton, IonButton, IonButtons, IonCheckbox, IonCol, IonContent, IonFab, IonFabButton, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonListHeader, IonMenuButton, IonModal, IonPage, IonRow, IonSearchbar, IonText, IonThumbnail, IonTitle, IonToast, IonToolbar, useIonViewDidEnter, useIonViewWillEnter, useIonViewWillLeave } from '@ionic/react';
+import { IonAvatar, IonButton, IonButtons, IonCol, IonContent, IonFab, IonFabButton, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonListHeader, IonMenuButton, IonModal, IonPage, IonRow, IonSearchbar, IonText, IonThumbnail, IonTitle, IonToast, IonToolbar, useIonViewDidEnter, useIonViewWillLeave } from '@ionic/react';
 import './Home.css';
 import { chatboxEllipsesOutline, searchOutline } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { auth, chattoWchat_lite, db, getContactIDs, getusers, usertoWuser, Wchat, Wchat_lite, Wuserdata } from '../firebaseConfig';
+import { auth, chattoWchat_lite, db, getContactIDs, getusers, usertoWuser, Wchat_lite, Wuserdata } from '../firebaseConfig';
 import { onSnapshot, doc, collection, query, where, documentId, getDocs, addDoc } from 'firebase/firestore';
 import NewUserConfig from '../components/NewUserConfig';
 import { useForm } from 'react-hook-form';
@@ -55,14 +55,9 @@ const Home: React.FC = () => {
     setIsCreating(true);
   };
 
-  const createChatRoom = () => {
-    setIsCreating(false);
-    setToastMessage('Chat room has been created!');
-  }
-
   useEffect(() => {
     const unsub = onSnapshot(doc(db, "users", auth.currentUser!.uid.toString()), (doc) => {//checking if user just signed up(2nd signup stage check)
-      console.log("Current data: ", !doc.data());
+      // console.log("Current data: ", !doc.data());
       setNewUser(!doc.data())//true if not found
     });
     const q = query(collection(db, "chats"), where("users", "array-contains", auth.currentUser?.uid));
@@ -70,7 +65,7 @@ const Home: React.FC = () => {
       const temp: Wchat_lite[] = [];
       querySnapshot.forEach((doc) => {
         temp.push(chattoWchat_lite(doc));
-        console.log(temp);
+        // console.log(temp);
       });
       setChats(temp);
 
@@ -110,7 +105,7 @@ const Home: React.FC = () => {
     });
     const docid = docRef.id;
     history.replace('/chat/' + docid);
-    console.log("Document written with ID: ", docRef.id);
+    // console.log("Document written with ID: ", docRef.id);
   }
   const makeGroupHandler = (data: any) => {
     setIsCreating(false);
@@ -123,7 +118,7 @@ const Home: React.FC = () => {
     } else {
       setToastMessage('Please add at least 1 contact to the group!');
     }
-    console.log("FORM", result);
+    // console.log("FORM", result);
     // console.log(data);
 
   }
@@ -132,7 +127,7 @@ const Home: React.FC = () => {
     console.log('component mounting....');
     App.addListener('backButton', data => {
       console.log('Restored state home :', data);
-      console.log('iscreating ',isCreating)
+      console.log('iscreating ', isCreating)
       if (isCreating) {
         setIsCreating(false);
       } else {

@@ -1,8 +1,8 @@
-import { IonCol, IonContent, IonGrid, IonPage, IonRow, IonTitle, IonText, IonButton, IonInput, IonToast, useIonViewWillEnter, IonHeader, IonModal, IonToolbar, IonItemDivider, IonLabel, IonIcon, useIonRouter, useIonViewWillLeave, useIonViewDidEnter } from '@ionic/react';
+import { IonCol, IonContent, IonGrid, IonPage, IonRow, IonTitle, IonText, IonButton, IonInput, IonToast, useIonViewWillEnter, IonHeader, IonModal, IonToolbar, IonItemDivider, IonIcon, useIonViewWillLeave, useIonViewDidEnter } from '@ionic/react';
 import { useRef, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import './Home.css';
-import { GoogleAuthProvider, onAuthStateChanged, sendPasswordResetEmail, signInWithCredential, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider, sendPasswordResetEmail, signInWithCredential, signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
 import { logoGoogle } from 'ionicons/icons';
 import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
@@ -15,17 +15,9 @@ const Login: React.FC = () => {
   const resetemailref = useRef<HTMLIonInputElement>(null);
   const emailref = useRef<HTMLIonInputElement>(null);
   const passwordref = useRef<HTMLIonInputElement>(null);
-  // onAuthStateChanged(auth, (user) => {
-  //   if (user) {
-  //     // User is signed in, see docs for a list of available properties
-  //     // https://firebase.google.com/docs/reference/js/firebase.User
-  //     const uid = user.uid;
-  //     history.replace('/tabs/home');
-  //   }
-  // });
   useIonViewWillEnter(() => {
-    console.log('ionViewWillEnter event fired');
-    console.log(auth.currentUser?.uid);
+    // console.log('ionViewWillEnter event fired');
+    // console.log(auth.currentUser?.uid);
     if (!!auth.currentUser?.uid) {//if user is logged in(true)
       history.replace('/tabs/home');
     }
@@ -37,9 +29,8 @@ const Login: React.FC = () => {
     const password = passwordref.current?.value?.toString();
     if (!!email && !!password) {
       signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+        .then(() => {
           // Signed in 
-          // const user = userCredential.user;
           // ...
           history.replace('/tabs/home');
         })
@@ -56,20 +47,6 @@ const Login: React.FC = () => {
     }
   }
   const signInWithGoogle = async () => {
-    //USING NATIVE JAVASCRIPT FIREBASE SDK
-    // const provider = new GoogleAuthProvider();
-    // signInWithPopup(auth, provider)
-    // .then((result) => {
-    //   history.replace('/tabs/home');
-    // }).catch((error) => {
-    //   console.log("Signin Failed!");
-    //   const errorCode = error.code;
-    //   const errorMessage = error.message;
-    //   console.log(errorCode);
-    //   console.log(errorMessage);
-    //   setToastMessage(errorMessage);
-    // });
-
     //USING CAPACITOR FIREBASE SDK
     // 1. Create credentials on the native layer
     const result = await FirebaseAuthentication.signInWithGoogle();
@@ -100,7 +77,6 @@ const Login: React.FC = () => {
         setToastMessage('Password Reset Email Sent!')
       })
       .catch((error) => {
-        const errorCode = error.code;
         const errorMessage = error.message;
         // ..
         setToastMessage(errorMessage)

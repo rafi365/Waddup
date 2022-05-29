@@ -39,7 +39,7 @@ import "./Home.css";
 
 const Contact: React.FC = () => {
   const slidingContactRef = useRef<HTMLIonItemSlidingElement>(null);
-
+  const history = useHistory()
   const [isAdding, setIsAdding] = useState(false);
   const [isSearch, setIsSearch] = useState(false);
   const [searchText, setSearchText] = useState('');
@@ -47,15 +47,12 @@ const Contact: React.FC = () => {
   const [toastMessage, setToastMessage] = useState('');
   const [contactList, setContactList] = useState<Wuserdata[]>();
   const contactref = useRef<HTMLIonInputElement>(null);
-
+  
   const startAddContactHandler = () => {
-    // console.log('Adding contact...');
     setIsAdding(true);
   }
 
   const startDeleteContactHandler = (e: string) => {
-    // console.log("starting delete, awaiting confirmation...");
-    // console.log('asdsa = '+e);
     setStartDeleting(e);
     slidingContactRef.current?.closeOpened();
   };
@@ -87,7 +84,6 @@ const Contact: React.FC = () => {
         // console.log('IN!')
         let temp: Wuserdata[] = [];
         while (e.length) {
-          // console.log(e.splice(0,10));
           const query_batch = e.splice(0, 10);// splits contacts list to get under the 10 per query limit
           const querysearch = query(collection(db, "users"), where(documentId(), "in", query_batch));//WARNING ONLY 10 MAX QUERRIES(according to docs)
           // console.log('fired!')
@@ -114,7 +110,6 @@ const Contact: React.FC = () => {
     refreshcontact();
   }, []);
 
-  const history = useHistory()
   const createDM = async (targetUserUID: string) => {
     const querysearch = query(collection(db, "chats"), where("isgroup", "==", false), where('users', '==', [auth.currentUser!.uid, targetUserUID]));
     const querysearch_reversed = query(collection(db, "chats"), where("isgroup", "==", false), where('users', '==', [targetUserUID, auth.currentUser!.uid]));
@@ -128,7 +123,7 @@ const Contact: React.FC = () => {
     querySnapshot_reversed.forEach((doc) => {
       resultids.push(doc.id);
     });
-    console.log("created DM", resultids);
+    // console.log("created DM", resultids);
     if (!!resultids.length) {
       history.replace('/chat/' + resultids[0]);
     } else {
@@ -140,14 +135,13 @@ const Contact: React.FC = () => {
       });
       const docid = docRef.id;
       history.replace('/chat/' + docid);
-      console.log("Document written with ID: ", docRef.id);
+      // console.log("Document written with ID: ", docRef.id);
     }
   }
   //backbutton management
   useIonViewDidEnter(()=>{
     App.addListener('backButton', data => {
       console.log('Restored state contacts:', data);
-      // App.exitApp();
       setIsAdding(false);
     });
   })

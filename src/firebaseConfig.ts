@@ -1,10 +1,8 @@
 import { initializeApp } from "firebase/app";
-import { addDoc, arrayRemove, arrayUnion, collection, doc, documentId, getDoc, getDocs, getFirestore, query, QueryDocumentSnapshot, serverTimestamp, setDoc, Timestamp, updateDoc, where } from "firebase/firestore";
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { useHistory } from "react-router";
+import { arrayRemove, arrayUnion, collection, doc, documentId, getDoc, getDocs, getFirestore, query, QueryDocumentSnapshot, serverTimestamp, setDoc, Timestamp, updateDoc, where } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
-import { url } from "inspector";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -32,7 +30,6 @@ export const checkFriendIDdupe = async (textid: string) => {
   const querySnapshot = await getDocs(querysearch);
   let islooping = false;
   querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
     console.log(doc.id, " => ", doc.data());
     islooping = true;
   });
@@ -62,13 +59,12 @@ export async function addContact(friendID: string) {
     const querySnapshot = await getDocs(querysearch);
     let islooping = null;
     querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
+      // console.log(doc.id, " => ", doc.data());
       islooping = doc.id;
     });
     if (!!islooping) {
       if (islooping === auth.currentUser!.uid) return "Cannot add yourself as contact!";
-      const docRef = await updateDoc(doc(db, "users", auth.currentUser!.uid), {
+      await updateDoc(doc(db, "users", auth.currentUser!.uid), {
         contacts: arrayUnion(islooping)
       });
       return "Contacts Successfully added!";
@@ -84,14 +80,11 @@ export async function addContact(friendID: string) {
 export async function deleteContact(friendID: string) {
   try {
 
-    const docRef = await updateDoc(doc(db, "users", auth.currentUser!.uid), {
+    await updateDoc(doc(db, "users", auth.currentUser!.uid), {
       contacts: arrayRemove(friendID)
     });
     return "Contacts Successfully deleted!"
-
-    // console.log("Document written with ID: ", docRef);
   } catch (e) {
-    // console.error("Error adding document: ", e);
     return `An Error Occoured! ${e}`;
   }
 }
@@ -108,30 +101,6 @@ export const getSingleUser = async (userid: string | undefined) => {
   }
 }
 
-// export const getusername = async (userid: string) => {
-//   const docSnap = await getDoc(doc(db, "users", userid));
-//   if (docSnap.exists()) {
-//     console.log("Document data:", docSnap.data().name);
-//     return `${docSnap.data().name}`.toString();
-//   } else {
-//     // doc.data() will be undefined in this case
-//     console.log("No such document!");
-//     return "Unknown";
-//   }
-// }
-
-// export const getuserid = async (userid: string) => {
-//   const docSnap = await getDoc(doc(db, "users", userid));
-//   if (docSnap.exists()) {
-//     console.log("Document data:", docSnap.data().friendID);
-//     return `${docSnap.data().friendID}`.toString();
-//   } else {
-//     // doc.data() will be undefined in this case
-//     console.log("No such document!");
-//     return "Unknown";
-//   }
-// }
-
 export const getContactIDs = async () => {
   const docSnap = await getDoc(doc(db, "users", auth.currentUser!.uid));
   if (docSnap.exists()) {
@@ -140,8 +109,7 @@ export const getContactIDs = async () => {
 
     return out;
   } else {
-    // doc.data() will be undefined in this case
-    console.log("No such document!");
+    // console.log("No such document!");
     return null;
   }
 }
@@ -173,7 +141,7 @@ export const getusers = async (users: string[] | null | undefined) => {
     }
     return temp;
   } else {
-    console.log('IT WAS NULL!!')
+    // console.log('IT WAS NULL!!')
     return null;
   }
 }
@@ -240,10 +208,10 @@ export const usertoWuser = (userdata: QueryDocumentSnapshot) => {
 
 export const chattoWchat = async (chatinfo: QueryDocumentSnapshot) => {
   const asd: string[] = chatinfo.data()['users'];
-  console.log('chattowhat')
+  // console.log('chattowhat')
   let result = null;
   const e = await getusers(asd)
-  console.log('got users = ', e);
+  // console.log('got users = ', e);
   const a: Wchat = {
     chatuid: chatinfo.id,
     chatname: chatinfo.data()['chatname'],
@@ -271,7 +239,7 @@ export const getchatdata = async (chatid: string) => {
   const docRef = doc(db, "chats", chatid);
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
-    console.log("Document data:", docSnap.data());
+    // console.log("Document data:", docSnap.data());
     return await chattoWchat(docSnap)
   } return null;
 }

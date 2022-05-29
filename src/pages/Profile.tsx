@@ -20,7 +20,6 @@ import {
   IonText,
   IonTitle,
   IonToolbar,
-  useIonViewWillEnter,
   useIonViewWillLeave,
 } from "@ionic/react";
 import { signOut } from "firebase/auth";
@@ -37,18 +36,6 @@ const Profile: React.FC = () => {
   const [status, setStatus] = useState<string>();
   const [userInfo, setUserInfo] = useState<Wuserdata | null>(null);
   const [modalProfile, setModalProfile] = useState(false);
-
-  // const nameRef = useRef<HTMLIonInputElement>();
-  // const idRef = useRef<HTMLIonInputElement>();
-  // const statusRef = useRef<HTMLIonInputElement>();
-
-  // const signout = () => FirebaseAuthentication.signOut().then(() => {
-  //   // Sign-out successful.
-  //   history.replace('/login');
-  // }).catch((error) => {
-  //   // An error happened.
-  //   console.log(error)
-  // });
 
   const signout = async () => {
     await signOut(auth)
@@ -67,10 +54,6 @@ const Profile: React.FC = () => {
     refreshUser();
   }, [userInfo]);
 
-  // useIonViewWillEnter(() => {
-  //   getusername(auth.currentUser!.uid).then((a) => setName(a));
-  //   getuserid(auth.currentUser!.uid).then((a) => setUserId(a));
-  // });
   const refreshUser = () => {
     setName(userInfo?.name ? userInfo.name : "");
     setStatus(userInfo?.status ? userInfo.status : "");
@@ -98,7 +81,7 @@ const Profile: React.FC = () => {
     modalHandler();
     // App.exitApp();
   });
-  useIonViewWillLeave(()=>{
+  useIonViewWillLeave(() => {
     console.log("profile unmounted!");
     App.removeAllListeners()
   })
@@ -142,7 +125,6 @@ const Profile: React.FC = () => {
               src={!!userInfo?.avatarurl ? userInfo.avatarurl : "https://media.discordapp.net/attachments/926433926027808770/965095961418428476/IMG_20220410_233007.jpg?width=476&height=480"}
               alt="#"
             />
-            {/* <h1 className="ion-margin-top">Om Burhan</h1> */}
 
             <IonGrid className="center-info">
               <IonRow>

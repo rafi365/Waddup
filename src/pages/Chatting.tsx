@@ -32,30 +32,23 @@ import {
 } from "@ionic/react";
 import {
   addOutline,
-  callOutline,
   cameraSharp,
-  caretForwardCircle,
   close,
-  heart,
   locationSharp,
   peopleOutline,
   searchOutline,
   send,
-  share,
-  trash,
 } from "ionicons/icons";
-import { SetStateAction } from "react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { Geolocation, Position } from '@capacitor/geolocation';
 
 import "./Home.css";
 import "./Chatting.css";
-import { auth, chatmessagetoWchatmessage, db, getchatdata, storagedb, Wchat, Wchatmessage } from "../firebaseConfig";
+import { auth, chatmessagetoWchatmessage, db, getchatdata, Wchat, Wchatmessage } from "../firebaseConfig";
 import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { useForm } from "react-hook-form";
 import CameraUploader from "../components/CameraUploader";
-import { ref, deleteObject } from "firebase/storage";
 import { App } from "@capacitor/app";
 
 const Chatting = () => {
@@ -103,7 +96,7 @@ const Chatting = () => {
   const urlvar = useParams<{ chatID: string }>().chatID;
 
   useEffect(() => {
-    console.log('firing getchatdata')
+    // console.log('firing getchatdata')
     getchatdata(urlvar).then((e) => {
       // console.log('chat',e)
       setChatInfos(e)
@@ -121,7 +114,7 @@ const Chatting = () => {
       return unsub; // unsubscribe on unmount
     });
 
-    console.log('done firing!');
+    // console.log('done firing!');
   }, []);
 
   useEffect(() => {
@@ -151,7 +144,7 @@ const Chatting = () => {
 
     const coordinates = await Geolocation.getCurrentPosition();
 
-    console.log('Current position:', coordinates);
+    // console.log('Current position:', coordinates);
     return coordinates;
   };
 
@@ -179,24 +172,12 @@ const Chatting = () => {
   const ChangeGroupSettingsHandler = (data: any) => {
     setIsGroupSettingOpened(false);
     ChangeGroupSettingsName(data['gname']);
-    // const result = contactList?.flatMap((e) =>
-    //   (!!data[e.uid]) ? [e.uid] : []
-    // )
-    // if (result?.length) {
-    //   createGroup(result, data["gname"]);
-
-    // } else {
-    //   setToastMessage('Please add at least 1 contact to the group!');
-    // }
-    // console.log("FORM", result);
-    // console.log(data);
-
   }
 
   const prepareCam = () => {
     const newCameramsgID = doc(collection(db, "chats", chatInfos!.chatuid, 'message'));
     setCamerachatID(newCameramsgID.id);
-    console.log("camera chat id is : ", newCameramsgID.id)
+    // console.log("camera chat id is : ", newCameramsgID.id)
     setIsCameraBoxOpened(true)
   }
   const uploadImageChat = async (url: string | null) => {
@@ -214,26 +195,15 @@ const Chatting = () => {
   }
 
   const cancelImageUpload = () => {
-    // if (!!CamerachatID && !!chatInfos?.chatuid) {
-    //   const deleteRef = ref(storagedb, 'chats/' + chatInfos?.chatuid + '/' + CamerachatID);
-
-    //   // Delete the file
-    //   deleteObject(deleteRef).then(() => {
-    //     // File deleted successfully
-    //   }).catch((error) => {
-    //     // Uh-oh, an error occurred!
-    //     // console.log("delete failed ",error)
-    //   });
-    // }
     setCamerachatID(null);
     setIsCameraBoxOpened(false);
   }
+
   //backbutton management
   //cant use "useIonViewDidEnter" because jumping from tabs.tsx to app.tsx routing won't trigger viewenter and viewleave! 
   App.addListener('backButton', data => {
     console.log('mounting chat...')
     console.log('Restored state chat :', data);
-    // App.exitApp();
     if (isCameraBoxOpened) {
       cancelImageUpload();
     }
@@ -241,8 +211,7 @@ const Chatting = () => {
       setIsGroupSettingOpened(false);
     }
   });
-  // useIonViewDidEnter(()=>{
-  // })
+
   useIonViewWillLeave(() => {
     console.log("chat unmounted!");
     App.removeAllListeners()
@@ -294,7 +263,6 @@ const Chatting = () => {
                     <div key={e.uid}>
                       <label htmlFor={e.uid!.toString()}>
                         <IonItem color='secondary' lines="full">
-                          {/* <input type='checkbox' slot='start' {...register(e.uid!.toString(), {})} id={e.uid!.toString()} /> */}
                           <IonThumbnail slot="start" className='ion-margin' >
                             <IonAvatar>
                               <img src={!!e.avatarurl ? e.avatarurl : 'https://media.discordapp.net/attachments/841587576464736266/946390659852546069/tasm3_confirmed_20220224_155923_0.jpg?width=338&height=338'} />
@@ -310,7 +278,6 @@ const Chatting = () => {
                   )
                 }) : <h1>No Contacts!</h1>}
               </IonContent>
-
             </IonList>
           </form>
 
@@ -456,8 +423,6 @@ const Chatting = () => {
           }]}
         >
         </IonActionSheet>
-
-
       </IonContent>
 
       <IonFooter className="chat-footer" id="chat-footer">

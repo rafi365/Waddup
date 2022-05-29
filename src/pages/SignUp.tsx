@@ -1,25 +1,15 @@
 import { IonButton, IonCol, IonContent, IonGrid, IonInput, IonPage, IonRow, IonText, IonTitle, IonToast, useIonViewWillEnter } from '@ionic/react';
-import { createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useRef, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { auth } from '../firebaseConfig';
 import './Home.css';
 
 const SignUp: React.FC = () => {
-  const [isSignUp, setIsSignUp] = useState(false);
-  const btnSignUp = useRef<HTMLIonButtonElement>(null);
   const [toastMessage, setToastMessage] = useState('');
   const history = useHistory();
   const emailref = useRef<HTMLIonInputElement>(null);
   const passwordref = useRef<HTMLIonInputElement>(null);
-  // onAuthStateChanged(auth, (user) => {
-  //   if (user) {
-  //     // User is signed in, see docs for a list of available properties
-  //     // https://firebase.google.com/docs/reference/js/firebase.User
-  //     const uid = user.uid;
-  //     history.replace('/tabs/home');
-  //   }
-  // });
   useIonViewWillEnter(() => {
     console.log('ionViewWillEnter event fired');
     console.log(auth.currentUser?.uid);
@@ -34,9 +24,8 @@ const SignUp: React.FC = () => {
     const password = passwordref.current?.value?.toString();
     if (!!email && !!password) {
       createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+        .then(() => {
           // Signed in 
-          const user = userCredential.user;
           // ...
           setToastMessage('Sign Up Success!');
           history.replace('/tabs/home');

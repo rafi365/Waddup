@@ -1,8 +1,8 @@
-import { IonButton, IonCol, IonContent, IonIcon, IonLabel, IonPage, IonRow } from "@ionic/react"
+import { IonButton, IonCol, IonIcon, IonLabel, IonRow } from "@ionic/react"
 import { camera } from "ionicons/icons";
 import { Camera, CameraResultType } from '@capacitor/camera';
 import { useEffect, useState } from "react";
-import { auth, storagedb, uploadPhotoHandler } from "../firebaseConfig";
+import { storagedb, uploadPhotoHandler } from "../firebaseConfig";
 import { getDownloadURL, ref } from "firebase/storage";
 const CameraUploader: React.FC<{ onlypathtofile: string, filename: string, functioncallbackresult: (result: string | null) => void }> = ({ onlypathtofile, filename, functioncallbackresult }) => {
     const [takenPhoto, setTakenPhoto] = useState('');
@@ -20,13 +20,11 @@ const CameraUploader: React.FC<{ onlypathtofile: string, filename: string, funct
             allowEditing: false,
             resultType: CameraResultType.Base64
         });
-        console.log(photo);
+        // console.log(photo);
 
-        if (!photo || /*!photo.path ||*/ !photo.base64String) {
-            // console.log("NAPA KE SINI?!?!?");
+        if (!photo || !photo.base64String) {
             return;
         }
-        // console.log("sjdkajkd");
         uploadPhotoHandler(onlypathtofile, filename, "data:image/jpg;base64," + photo.base64String).then((e) => {
             setTakenPhoto(e);
             functioncallbackresult(e);
@@ -49,13 +47,6 @@ const CameraUploader: React.FC<{ onlypathtofile: string, filename: string, funct
                     </IonButton>
                 </IonCol>
             </IonRow>
-
-            <IonRow className="ion-ion-margin-top">
-                <IonCol className="ion-text-center">
-                    {/* <IonButton onClick={uploadPhotoHandler}>upload photo</IonButton> */}
-                </IonCol>
-            </IonRow>
-
         </>
 
 

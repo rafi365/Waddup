@@ -1,4 +1,3 @@
-import React from "react";
 
 import { IonIcon, IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, useIonViewWillEnter, useIonViewWillLeave } from "@ionic/react";
 import { chatbubbleEllipses, peopleCircle } from "ionicons/icons";
@@ -6,7 +5,6 @@ import { Redirect, Route, useHistory } from "react-router";
 import Home from "../pages/Home";
 import Contact from "../pages/Contact";
 import Profile from "./Profile";
-import Chatting from "./Chatting";
 import { auth } from "../firebaseConfig";
 import Faq from "./Faq";
 import { App } from "@capacitor/app";

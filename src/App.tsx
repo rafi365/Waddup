@@ -17,7 +17,6 @@ import {
   setupIonicReact,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import Home from "./pages/Home";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -39,8 +38,6 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
-// import Profile from "./pages/Profile";
-// import Contact from "./pages/Contact";
 import {
   helpCircleOutline,
   moon,
@@ -50,7 +47,6 @@ import Tabs from "./pages/Tabs";
 import Chatting from "./pages/Chatting";
 import { useEffect, useState } from "react";
 import { auth } from "./firebaseConfig";
-import { User } from "firebase/auth";
 import { Storage } from '@capacitor/storage';
 
 
@@ -86,11 +82,9 @@ const App: React.FC = () => {
   useEffect(() => {
     console.log(document.body.classList.toggle("dark",darkToggle));
   }, [darkToggle]);
-  const [user, setUser] = useState<User|null|undefined>();
 
   // Handle user state changes
-  function onAuthStateChanged(user:User|null|undefined) {
-    setUser(user);
+  function onAuthStateChanged() {
     if (initializing) setInitializing(false);
   }
 
@@ -100,9 +94,6 @@ const App: React.FC = () => {
     return subscriber; // unsubscribe on unmount
   }, []);
 
-  // if (initializing) return (<>
-  // <h1>Connecting to firebase Servers.......</h1>
-  // </>);
   if (initializing) return null;
 
 
