@@ -132,7 +132,7 @@ const App: React.FC = () => {
           </IonContent>
           <IonFooter>
             <IonToolbar color="primary">
-              <IonTitle className="ion-text-center">Version 0.0.1</IonTitle>
+              <IonTitle className="ion-text-center">Version 1.0</IonTitle>
             </IonToolbar>
           </IonFooter>
         </IonMenu>
