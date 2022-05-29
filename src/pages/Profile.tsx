@@ -78,8 +78,7 @@ const Profile: React.FC = () => {
   //backbutton management
   App.addListener('backButton', data => {
     console.log('Restored state profile :', data);
-    modalHandler();
-    // App.exitApp();
+    setModalProfile(false);
   });
   useIonViewWillLeave(() => {
     console.log("profile unmounted!");
