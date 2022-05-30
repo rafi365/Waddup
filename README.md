@@ -50,3 +50,11 @@ firebase features needed
  - Firebase Authentication (Google and Email Auth)
  - Cloud Firestore
  - Cloud Storage for Firebase
+
+## The Project Team
+
+ - Muhammad Rafi Sofyan - 00000037957
+ - Moh Rizki Zidane - 00000039906
+ - Edrick Sugiharto Putra  - 00000041062
+ - Umar Haqi  - 00000041073
+ - Fahmi Ihsan- 00000041084
